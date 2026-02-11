@@ -399,14 +399,7 @@ export default function OnboardingWizard() {
     });
   }, []);
 
-  // ─── Don't render if hidden ───────────────────────────────────────
-  if (!showOnboarding) return null;
-
-  // ═══════════════════════════════════════════════════════════════════
-  // Step renderers
-  // ═══════════════════════════════════════════════════════════════════
-
-  // Switch to guided onboarding (IntakeForm)
+  // Switch to guided onboarding (IntakeForm) - must be before early return
   const handleGuidedOnboarding = useCallback(() => {
     setShowOnboarding(false);
     // Small delay to let the wizard close before opening the form
@@ -414,6 +407,13 @@ export default function OnboardingWizard() {
       useGlobeStore.getState().setShowIntakeForm(true);
     }, 300);
   }, [setShowOnboarding]);
+
+  // ─── Don't render if hidden ───────────────────────────────────────
+  if (!showOnboarding) return null;
+
+  // ═══════════════════════════════════════════════════════════════════
+  // Step renderers
+  // ═══════════════════════════════════════════════════════════════════
 
   const renderStep1 = () => (
     <div className="flex flex-col items-center text-center px-2">
