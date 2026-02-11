@@ -70,6 +70,12 @@ const OnboardingWizard = dynamic(
   { ssr: false }
 );
 
+// Intake form for guided onboarding
+const IntakeForm = dynamic(
+  () => import('@/components/onboarding/IntakeForm').then((mod) => mod.default),
+  { ssr: false }
+);
+
 // Welcome tile - floating context card for first-time visitors
 const WelcomeTile = dynamic(
   () => import('@/components/layout/WelcomeTile').then((mod) => mod.default),
@@ -161,6 +167,8 @@ function KeyboardShortcutsOverlay({ onClose }: { onClose: () => void }) {
 export default function HomePage() {
   const { showShortcuts, setShowShortcuts } = useKeyboardNav();
   const viewMode = useGlobeStore((s) => s.viewMode);
+  const showIntakeForm = useGlobeStore((s) => s.showIntakeForm);
+  const setShowIntakeForm = useGlobeStore((s) => s.setShowIntakeForm);
 
   return (
     <main
@@ -249,6 +257,11 @@ export default function HomePage() {
 
       {/* Onboarding wizard */}
       <OnboardingWizard />
+
+      {/* Intake form for guided onboarding */}
+      <AnimatePresence>
+        {showIntakeForm && <IntakeForm onClose={() => setShowIntakeForm(false)} />}
+      </AnimatePresence>
 
       {/* Keyboard shortcuts overlay */}
       <AnimatePresence>

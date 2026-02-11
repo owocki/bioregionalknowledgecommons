@@ -406,6 +406,15 @@ export default function OnboardingWizard() {
   // Step renderers
   // ═══════════════════════════════════════════════════════════════════
 
+  // Switch to guided onboarding (IntakeForm)
+  const handleGuidedOnboarding = useCallback(() => {
+    setShowOnboarding(false);
+    // Small delay to let the wizard close before opening the form
+    setTimeout(() => {
+      useGlobeStore.getState().setShowIntakeForm(true);
+    }, 300);
+  }, [setShowOnboarding]);
+
   const renderStep1 = () => (
     <div className="flex flex-col items-center text-center px-2">
       <div className="relative mb-8 mt-2">
@@ -437,6 +446,13 @@ export default function OnboardingWizard() {
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
+      </button>
+      {/* Link to guided onboarding */}
+      <button
+        onClick={handleGuidedOnboarding}
+        className="mt-4 text-xs text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2 cursor-pointer"
+      >
+        Prefer a guided onboarding session? Request one here
       </button>
     </div>
   );

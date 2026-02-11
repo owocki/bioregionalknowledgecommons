@@ -194,6 +194,7 @@ export interface GlobeState {
   showPlaceNames: boolean;
   showSatelliteImagery: boolean;
   showOnboarding: boolean;
+  showIntakeForm: boolean;
   /** Boundary polygon being drawn during onboarding [[lng, lat], ...] */
   onboardingBoundary: [number, number][];
   /** Currently selected ecoregion (drilldown from bioregion panel) */

@@ -32,6 +32,7 @@ interface GlobeStore extends GlobeState {
   setHoveredFlow: (flow: HoveredFlow | null) => void;
   setSelectedEcoregion: (ecoId: number | null) => void;
   setShowOnboarding: (show: boolean) => void;
+  setShowIntakeForm: (show: boolean) => void;
   setIsDrawingBoundary: (drawing: boolean) => void;
   addBoundaryPoint: (lngLat: [number, number]) => void;
   undoBoundaryPoint: () => void;
@@ -53,6 +54,7 @@ const initialState: GlobeState = {
   showPlaceNames: true,
   showSatelliteImagery: true,
   showOnboarding: false,
+  showIntakeForm: false,
   selectedEcoregion: null,
   onboardingBoundary: [],
   isDrawingBoundary: false,
@@ -99,6 +101,7 @@ export const useGlobeStore = create<GlobeStore>((set) => ({
     }),
   setSelectedEcoregion: (ecoId) => set({ selectedEcoregion: ecoId }),
   setShowOnboarding: (show) => set({ showOnboarding: show }),
+  setShowIntakeForm: (show) => set({ showIntakeForm: show }),
   setIsDrawingBoundary: (drawing) => set({ isDrawingBoundary: drawing }),
   addBoundaryPoint: (lngLat) =>
     set((s) => ({ onboardingBoundary: [...s.onboardingBoundary, lngLat] })),

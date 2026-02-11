@@ -1,0 +1,51 @@
+{
+  "bridges": [
+    {
+      "bridge_id": "colorado-plateau-sierra-nevada-water-v1",
+      "source_node_id": "a1b2c3d4-1111-4000-8000-000000000001",
+      "target_node_id": "a1b2c3d4-2222-4000-8000-000000000002",
+      "source_bioregion": "NA19",
+      "target_bioregion": "NA15",
+      "primary_domain": "watershed-governance",
+      "version": "1.0.0",
+      "vocabulary_count": 14,
+      "average_confidence": 0.82,
+      "status": "active",
+      "file": "colorado-plateau-sierra-nevada.yaml",
+      "last_updated": "2026-02-11"
+    },
+    {
+      "bridge_id": "cascadia-great-lakes-governance-v1",
+      "source_node_id": "a1b2c3d4-3333-4000-8000-000000000003",
+      "target_node_id": "a1b2c3d4-4444-4000-8000-000000000004",
+      "source_bioregion": "NA08",
+      "target_bioregion": "NA12",
+      "primary_domain": "community-governance",
+      "version": "1.0.0",
+      "vocabulary_count": 15,
+      "average_confidence": 0.84,
+      "status": "active",
+      "file": "cascadia-great-lakes.yaml",
+      "last_updated": "2026-02-11"
+    },
+    {
+      "bridge_id": "sierra-nevada-cascadia-ecology-v1",
+      "source_node_id": "a1b2c3d4-2222-4000-8000-000000000002",
+      "target_node_id": "a1b2c3d4-3333-4000-8000-000000000003",
+      "source_bioregion": "NA15",
+      "target_bioregion": "NA08",
+      "primary_domain": "ecological-restoration",
+      "version": "1.0.0",
+      "vocabulary_count": 17,
+      "average_confidence": 0.89,
+      "status": "active",
+      "file": "sierra-nevada-cascadia.yaml",
+      "last_updated": "2026-02-11"
+    }
+  ],
+  "meta": {
+    "count": 3,
+    "last_updated": "2026-02-11",
+    "schema_version": "1.0.0"
+  }
+}

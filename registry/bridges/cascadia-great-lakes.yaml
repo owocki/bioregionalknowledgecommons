@@ -1,0 +1,135 @@
+# Schema Bridge: Cascadia ↔ Great Lakes
+# Version: 1.0.0
+# Created: 2026-02-11
+# Status: active
+
+bridge_id: "cascadia-great-lakes-governance-v1"
+version: "1.0.0"
+created_at: "2026-02-11"
+updated_at: "2026-02-11"
+
+# Source and target nodes
+source:
+  node_id: "a1b2c3d4-3333-4000-8000-000000000003"
+  display_name: "Cascadia Bioregion Governance Network"
+  bioregion_code: "NA08"
+  schema_version: "0.1.0"
+
+target:
+  node_id: "a1b2c3d4-4444-4000-8000-000000000004"
+  display_name: "Great Lakes Commons"
+  bioregion_code: "NA12"
+  schema_version: "0.1.0"
+
+# Vocabulary mappings
+mappings:
+  # Governance models
+  - source_term: "bioregional democracy"
+    target_term: "watershed democracy"
+    confidence: 0.90
+    notes: "Both emphasize ecological boundaries for governance"
+    bidirectional: true
+
+  - source_term: "salmon nation"
+    target_term: "lake nation"
+    confidence: 0.75
+    notes: "Cultural identity tied to keystone species/features"
+    bidirectional: true
+
+  - source_term: "reinhabitation"
+    target_term: "place-based living"
+    confidence: 0.85
+    notes: "Both refer to deep connection to local ecology"
+    bidirectional: true
+
+  # Indigenous governance
+  - source_term: "Coast Salish governance"
+    target_term: "Anishinaabe governance"
+    confidence: 0.60
+    notes: "Different Indigenous nations; parallel governance concepts"
+    bidirectional: true
+
+  - source_term: "potlatch economy"
+    target_term: "gift economy"
+    confidence: 0.78
+    notes: "Potlatch is specific practice; gift economy more general"
+    bidirectional: false
+
+  - source_term: "first foods"
+    target_term: "traditional foods"
+    confidence: 0.92
+    notes: "Foods central to Indigenous foodways and ceremony"
+    bidirectional: true
+
+  # Water governance
+  - source_term: "estuary protection"
+    target_term: "coastal wetland protection"
+    confidence: 0.85
+    notes: "Cascadia estuaries vs Great Lakes coastal wetlands"
+    bidirectional: true
+
+  - source_term: "salmon runs"
+    target_term: "fish passages"
+    confidence: 0.65
+    notes: "Salmon specific vs general fish migration"
+    bidirectional: false
+
+  - source_term: "dam removal"
+    target_term: "dam removal"
+    confidence: 1.0
+    notes: "Same term used in both regions"
+    bidirectional: true
+
+  # Environmental policy
+  - source_term: "rights of nature ordinance"
+    target_term: "ecosystem rights"
+    confidence: 0.88
+    notes: "Legal frameworks for nature's rights"
+    bidirectional: true
+
+  - source_term: "watershed council"
+    target_term: "Great Lakes compact council"
+    confidence: 0.70
+    notes: "Different scale but similar function"
+    bidirectional: true
+
+  - source_term: "bioregional mapping"
+    target_term: "basin mapping"
+    confidence: 0.92
+    notes: "Both map ecological rather than political boundaries"
+    bidirectional: true
+
+  # Community organizing
+  - source_term: "community land trust"
+    target_term: "community land trust"
+    confidence: 1.0
+    notes: "Same model used in both regions"
+    bidirectional: true
+
+  - source_term: "food sovereignty"
+    target_term: "food sovereignty"
+    confidence: 1.0
+    notes: "Same concept, widely used"
+    bidirectional: true
+
+  - source_term: "ecological design"
+    target_term: "regenerative design"
+    confidence: 0.87
+    notes: "Overlapping design philosophies"
+    bidirectional: true
+
+# Metadata
+metadata:
+  primary_domain: "community-governance"
+  review_schedule: "quarterly"
+  last_reviewed: "2026-02-11"
+  maintainers:
+    - "cascadia-governance-collective"
+    - "great-lakes-commons-team"
+
+  stats:
+    total_mappings: 15
+    high_confidence_count: 10
+    medium_confidence_count: 4
+    low_confidence_count: 1
+    average_confidence: 0.84
