@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+out/
+dist/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Screenshots (dev artifacts)
+*.png
+
+# Large source GeoJSON (kept in .claude/ for reference, not needed in repo)
+.claude/bioregions/one_earth-bioregions-2023-enriched.geojson
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+
+# Playwright MCP logs
+.playwright-mcp/

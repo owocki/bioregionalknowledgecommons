@@ -1,0 +1,193 @@
+// Core data types for the Bioregional Knowledge Commons Visualizer
+
+// ============================================================
+// Registry Types
+// ============================================================
+
+export interface NodeEntry {
+  node_id: string;
+  display_name: string;
+  repo_url: string;
+  quartz_url: string | null;
+  bioregion_codes: string[];
+  thematic_domain: ThematicDomain;
+  topic_tags: string[];
+  agent_endpoint: string | null;
+  hosting: 'shared' | 'self-hosted' | null;
+  federation_version: string | null;
+  schema_version: string | null;
+  bridges: string[];
+  interaction_channels: InteractionChannels;
+  created_at: string;
+  maintainers: string[];
+}
+
+export type ThematicDomain =
+  | 'watershed-governance'
+  | 'food-systems'
+  | 'cultural-heritage'
+  | 'ecological-restoration'
+  | 'community-governance'
+  | 'traditional-knowledge'
+  | 'climate-resilience'
+  | 'other';
+
+export interface InteractionChannels {
+  web_chat?: boolean;
+  telegram?: string;
+  api?: string;
+}
+
+export interface RegistryData {
+  nodes: NodeEntry[];
+  meta: {
+    count: number;
+    last_updated: string;
+  };
+}
+
+// ============================================================
+// Bioregion Types
+// ============================================================
+
+export interface BioregionLookup {
+  [code: string]: BioregionInfo;
+}
+
+export interface BioregionInfo {
+  code: string;
+  name: string;
+  realm: Realm;
+  subrealm: string;
+  centroid: [number, number]; // [lng, lat]
+  area_km2?: number;
+}
+
+export type Realm =
+  | 'Nearctic'
+  | 'Palearctic'
+  | 'Neotropic'
+  | 'Afrotropic'
+  | 'Indomalayan'
+  | 'Australasia'
+  | 'Oceanian'
+  | 'Antarctic';
+
+export const REALM_PREFIXES: Record<string, Realm> = {
+  NA: 'Nearctic',
+  PA: 'Palearctic',
+  NT: 'Neotropic',
+  AT: 'Afrotropic',
+  IM: 'Indomalayan',
+  AU: 'Australasia',
+  OC: 'Oceanian',
+  AN: 'Antarctic',
+};
+
+export const REALM_COLORS: Record<Realm, string> = {
+  Nearctic: '#4A90D9',
+  Palearctic: '#7B68EE',
+  Neotropic: '#2ECC71',
+  Afrotropic: '#E67E22',
+  Indomalayan: '#E74C3C',
+  Australasia: '#F1C40F',
+  Oceanian: '#1ABC9C',
+  Antarctic: '#95A5A6',
+};
+
+export const DOMAIN_COLORS: Record<ThematicDomain, string> = {
+  'watershed-governance': '#3498DB',
+  'food-systems': '#27AE60',
+  'cultural-heritage': '#8E44AD',
+  'ecological-restoration': '#2ECC71',
+  'community-governance': '#E67E22',
+  'traditional-knowledge': '#C0392B',
+  'climate-resilience': '#16A085',
+  other: '#7F8C8D',
+};
+
+// ============================================================
+// Flow Types
+// ============================================================
+
+export interface Flow {
+  source_node_id: string;
+  target_node_id: string;
+  flow_type: 'fork' | 'contribution';
+  volume: number;
+  last_activity: string;
+  direction: 'unidirectional' | 'bidirectional';
+}
+
+export interface FlowData {
+  flows: Flow[];
+  generated_at: string;
+  cache_ttl: number;
+}
+
+// ============================================================
+// Bridge Types
+// ============================================================
+
+export interface BridgeEntry {
+  bridge_id: string;
+  version: string;
+  source_node_id: string;
+  target_node_id: string;
+  vocabulary_count: number;
+  confidence_avg: number;
+  last_updated: string;
+  review_status: 'recent' | 'approaching' | 'stale';
+}
+
+// ============================================================
+// Globe Interaction Types
+// ============================================================
+
+export interface CameraTarget {
+  lat: number;
+  lng: number;
+  zoom: number;
+  /** Timestamp to allow re-triggering the same location */
+  timestamp: number;
+}
+
+export interface GlobeState {
+  selectedNodeId: string | null;
+  selectedBioregion: string | null;
+  hoveredBioregion: string | null;
+  userLocation: { lat: number; lng: number } | null;
+  userBioregion: string | null;
+  cameraTarget: CameraTarget | null;
+  showFlowArcs: boolean;
+  showBridges: boolean;
+  showBioregions: boolean;
+  viewMode: 'globe' | 'map' | 'list';
+  searchQuery: string;
+  filters: GlobeFilters;
+}
+
+export interface GlobeFilters {
+  realms: Realm[];
+  domains: ThematicDomain[];
+  activityDays: number | null;
+  minBridges: number;
+}
+
+// ============================================================
+// UI Types
+// ============================================================
+
+export interface SearchResult {
+  node_id: string;
+  node_name: string;
+  relevance: number;
+  snippet: string;
+  bioregion_code: string;
+}
+
+export interface TooltipData {
+  type: 'bioregion' | 'node' | 'flow' | 'bridge';
+  position: { x: number; y: number };
+  data: Record<string, unknown>;
+}

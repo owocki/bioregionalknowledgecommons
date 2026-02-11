@@ -1,0 +1,1297 @@
+{
+  "AN01": {
+    "name": "Continental Antarctica",
+    "realm_code": "AN",
+    "realm_name": "Antarctic",
+    "subrealm_name": "Continental Antarctica",
+    "oneearth_url": "https://www.oneearth.org/bioregions/continental-antarctica-an01/"
+  },
+  "AN02": {
+    "name": "Antarctic Peninsula & Scotia Sea",
+    "realm_code": "AN",
+    "realm_name": "Antarctic",
+    "subrealm_name": "Antarctic Peninsula",
+    "oneearth_url": "https://www.oneearth.org/bioregions/antarctic-peninsula-scotia-sea-an02/"
+  },
+  "AN03": {
+    "name": "Subantarctic Indian Ocean Islands",
+    "realm_code": "AN",
+    "realm_name": "Antarctic",
+    "subrealm_name": "Subantarctic Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/subantarctic-indian-ocean-islands-an03/"
+  },
+  "AT01": {
+    "name": "Tristan Volcanic Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Southern Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/tristan-volcanic-islands-at01/"
+  },
+  "AT02": {
+    "name": "South African Cape Shrublands & Mountain Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Southern Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-african-cape-shrublands-mountain-forests-at02/"
+  },
+  "AT03": {
+    "name": "Amsterdam-Saint Paul Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Southern Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/amsterdam-saint-paul-islands-at03/"
+  },
+  "AT04": {
+    "name": "Mascarene Tropical Forest Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Madagascar & East African Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mascarene-tropical-forest-islands-at04/"
+  },
+  "AT05": {
+    "name": "Seychelles & Comoros Tropical Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Madagascar & East African Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/seychelles-comoros-tropical-islands-at05/"
+  },
+  "AT06": {
+    "name": "Madagascar Island",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Madagascar & East African Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/madagascar-island-at06/"
+  },
+  "AT07": {
+    "name": "East African Coastal Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Madagascar & East African Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/east-african-coastal-forests-at07/"
+  },
+  "AT08": {
+    "name": "Southeast African Subtropical Grasslands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southeast-african-subtropical-grasslands-at08/"
+  },
+  "AT09": {
+    "name": "Greater Karoo & Kalahari Drylands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-karoo-kalahari-drylands-at09/"
+  },
+  "AT10": {
+    "name": "Southwest African Coastal Drylands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southwest-african-coastal-drylands-at10/"
+  },
+  "AT11": {
+    "name": "Greater African Subequatorial Savannas & Mixed Woodlands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-african-subequatorial-savannas-mixed-woodlands-at11/"
+  },
+  "AT12": {
+    "name": "Victoria Basin & Albertine Rift Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/victoria-basin-albertine-rift-forests-at12/"
+  },
+  "AT13": {
+    "name": "South Congolian Forest-Savannas & Coastal Scarp",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-congolian-forest-savannas-coastal-scarp-at13/"
+  },
+  "AT14": {
+    "name": "Central Congolian Tropical Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-congolian-tropical-forests-at14/"
+  },
+  "AT15": {
+    "name": "North Congolian Lowland Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/north-congolian-lowland-forests-at15/"
+  },
+  "AT16": {
+    "name": "Mandara Mountain & North Congolian Forest-Savannas",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mandara-mountain-north-congolian-forest-savannas-at16/"
+  },
+  "AT17": {
+    "name": "Gulf of Guinea Coastal Forests & Mangroves",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Equatorial Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/gulf-of-guinea-coastal-forests-mangroves-at17/"
+  },
+  "AT18": {
+    "name": "St. Helena & Ascension Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Saharan Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/st-helena-ascension-islands-at18/"
+  },
+  "AT19": {
+    "name": "West African Coastal Forests & Savanna",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Saharan Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/west-african-coastal-forests-savanna-at19/"
+  },
+  "AT20": {
+    "name": "West Sudanian Savanna",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Saharan Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/west-sudanian-savanna-at20/"
+  },
+  "AT21": {
+    "name": "Lake Turkana-Sudd Grasslands, Bushlands & Forests",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Horn of Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/lake-turkana-sudd-grasslands-bushlands-forests-at21/"
+  },
+  "AT22": {
+    "name": "South Red Sea & Gulf of Aden Coastal Drylands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Horn of Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-red-sea-gulf-of-aden-coastal-drylands-at22/"
+  },
+  "AT23": {
+    "name": "Sahel Acacia Savannas",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Saharan Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sahel-acacia-savannas-at23/"
+  },
+  "AT24": {
+    "name": "Cape Verde Islands",
+    "realm_code": "AT",
+    "realm_name": "Afrotropic",
+    "subrealm_name": "Sub-Saharan Afrotropics",
+    "oneearth_url": "https://www.oneearth.org/bioregions/cape-verde-islands-at24/"
+  },
+  "AU01": {
+    "name": "New Zealand",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "New Zealand & Surrounding Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/new-zealand-au01/"
+  },
+  "AU02": {
+    "name": "Lord Howe & Norfolk Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "New Zealand & Surrounding Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/lord-howe-norfolk-islands-au02/"
+  },
+  "AU03": {
+    "name": "East Australian Temperate Forests & Mountain Shrublands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "East Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/east-australian-temperate-forests-mountain-shrublands-au03/"
+  },
+  "AU04": {
+    "name": "East Australian Mediterranean Woodlands & Temperate Savannas",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "East Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/east-australian-mediterranean-woodlands-temperate-savannas-au04/"
+  },
+  "AU05": {
+    "name": "South Australian Mediterranean Forests, Woodlands & Scrub",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "South & West Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-australian-mediterranean-forests-woodlands-scrub-au05/"
+  },
+  "AU06": {
+    "name": "West Australian Dry Coastal Shrublands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "South & West Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/west-australian-dry-coastal-shrublands-au06/"
+  },
+  "AU07": {
+    "name": "Greater Australian Interior Desert & Shrublands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "South & West Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-australian-interior-desert-shrublands-au07/"
+  },
+  "AU08": {
+    "name": "North Australian Tropical Savannas",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "North Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/north-australian-tropical-savannas-au08/"
+  },
+  "AU09": {
+    "name": "Queensland Tropical Rainforests & Savannas",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "North Australia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/queensland-tropical-rainforests-savannas-au09/"
+  },
+  "AU10": {
+    "name": "Coral Sea & New Caledonia Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Melanesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/coral-sea-new-caledonia-islands-au10/"
+  },
+  "AU11": {
+    "name": "Vanuatu Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Melanesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/vanuatu-islands-au11/"
+  },
+  "AU12": {
+    "name": "Solomon Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Melanesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/solomon-islands-au12/"
+  },
+  "AU13": {
+    "name": "New Guinea & Surrounding Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Melanesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/new-guinea-surrounding-islands-au13/"
+  },
+  "AU14": {
+    "name": "Sulawesi & Maluku Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Wallacea",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sulawesi-maluku-islands-au14/"
+  },
+  "AU15": {
+    "name": "Southeast Indonesian Dry Forest Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "Wallacea",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southeast-indonesian-dry-forest-islands-au15/"
+  },
+  "AU16": {
+    "name": "Subantarctic Antipodes Islands",
+    "realm_code": "AU",
+    "realm_name": "Australasia",
+    "subrealm_name": "New Zealand & Surrounding Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/subantarctic-antipodes-islands-au16/"
+  },
+  "IM01": {
+    "name": "Central Indian Ocean Islands",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Indian Ocean Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-indian-ocean-islands-im01/"
+  },
+  "IM02": {
+    "name": "Indian Tropical Coastal Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/indian-tropical-coastal-forests-im02/"
+  },
+  "IM03": {
+    "name": "Indian Dry Deciduous Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/indian-dry-deciduous-forests-im03/"
+  },
+  "IM04": {
+    "name": "North Indomalayan Deserts & Scrub Forest",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/north-indomalayan-deserts-scrub-forest-im04/"
+  },
+  "IM05": {
+    "name": "Himalayan Mixed Forests & Grasslands",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Himalaya",
+    "oneearth_url": "https://www.oneearth.org/bioregions/himalayan-mixed-forests-grasslands-im05/"
+  },
+  "IM06": {
+    "name": "North Indian Tropical Forests & Sundarbans",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/north-indian-tropical-forests-sundarbans-im06/"
+  },
+  "IM07": {
+    "name": "Northern Deccan & Odisha Tropical Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northern-deccan-odisha-tropical-forests-im07/"
+  },
+  "IM08": {
+    "name": "Greater Deccan-Sri Lankan Forests & Drylands",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "South Asia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-deccan-sri-lankan-forests-drylands-im08/"
+  },
+  "IM09": {
+    "name": "Myanmar Coastal Rainforests & Andaman Sea Islands",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asia Mainland",
+    "oneearth_url": "https://www.oneearth.org/bioregions/myanmar-coastal-rainforests-andaman-sea-islands-im09/"
+  },
+  "IM10": {
+    "name": "Arakan Mountains & Northern Triangle Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asia Mainland",
+    "oneearth_url": "https://www.oneearth.org/bioregions/arakan-mountains-northern-triangle-forests-im10/"
+  },
+  "IM11": {
+    "name": "Irrawaddy & North Indochina Mixed Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asia Mainland",
+    "oneearth_url": "https://www.oneearth.org/bioregions/irrawaddy-north-indochina-mixed-forests-im11/"
+  },
+  "IM12": {
+    "name": "Indochina Mixed Forests & Peatlands",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asia Mainland",
+    "oneearth_url": "https://www.oneearth.org/bioregions/indochina-mixed-forests-peatlands-im12/"
+  },
+  "IM13": {
+    "name": "South China Subtropical Evergreen & Monsoon Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asia Mainland",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-china-subtropical-evergreen-monsoon-forests-im13/"
+  },
+  "IM14": {
+    "name": "Nansei Islands Subtropical Evergreen Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "East Asian Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/nansei-islands-subtropical-evergreen-forests-im14/"
+  },
+  "IM15": {
+    "name": "Philippines & Sulu Sea Tropical Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asian Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/philippines-sulu-sea-tropical-forests-im15/"
+  },
+  "IM16": {
+    "name": "Borneo Tropical Forests & Sundaland Heath Forests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asian Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/borneo-tropical-forests-sundaland-heath-forests-im16/"
+  },
+  "IM17": {
+    "name": "Javan-Bali Tropical Rainforests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asian Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/javan-bali-tropical-rainforests-im17/"
+  },
+  "IM18": {
+    "name": "Peninsular Malaysian & Sumatran Tropical Rainforests",
+    "realm_code": "IM",
+    "realm_name": "Indomalayan",
+    "subrealm_name": "Southeast Asian Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/peninsular-malaysian-sumatran-tropical-rainforests-im18/"
+  },
+  "NA01": {
+    "name": "Greenland",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Arctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greenland-na01/"
+  },
+  "NA02": {
+    "name": "Canadian Tundra",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Arctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/canadian-tundra-na02/"
+  },
+  "NA03": {
+    "name": "North Alaskan Tundra",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Arctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/north-alaskan-tundra-na03/"
+  },
+  "NA04": {
+    "name": "Greater Alaska Taiga & Tundra",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Subarctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-alaska-taiga-tundra-na04/"
+  },
+  "NA05": {
+    "name": "Far Northern Pacific Coast",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Subarctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/far-northern-pacific-coast-na05/"
+  },
+  "NA06": {
+    "name": "Greater Yukon",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Subarctic America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-yukon-na06/"
+  },
+  "NA07": {
+    "name": "Northwest Canadian Taiga, Lakes, & Wetlands",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Northern Canada",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northwest-canadian-taiga-lakes-wetlands-na07/"
+  },
+  "NA08": {
+    "name": "Mid-Canada Boreal Plains & Foothill Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Northern Canada",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mid-canada-boreal-plains-foothill-forests-na08/"
+  },
+  "NA09": {
+    "name": "Canadian Shield & Coastal Taiga-Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Northern Canada",
+    "oneearth_url": "https://www.oneearth.org/bioregions/canadian-shield-coastal-taiga-forests-na09/"
+  },
+  "NA10": {
+    "name": "Northeastern American Mixed Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Eastern North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northeastern-american-mixed-forests-na10/"
+  },
+  "NA11": {
+    "name": "Northern Great Lakes Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Eastern North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northern-great-lakes-forests-na11/"
+  },
+  "NA12": {
+    "name": "Northern Prairie & Aspen Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Northern Great Plains",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northern-prairie-aspen-forests-na12/"
+  },
+  "NA13": {
+    "name": "Greater Rockies & Mountain Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-rockies-mountain-forests-na13/"
+  },
+  "NA14": {
+    "name": "Northwest Intermountain Conifer Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northwest-intermountain-conifer-forests-na14/"
+  },
+  "NA15": {
+    "name": "Pacific Northwest Coastal Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/pacific-northwest-coastal-forests-na15/"
+  },
+  "NA16": {
+    "name": "Cascades Mountain Forests & Valleys",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/cascades-mountain-forests-valleys-na16/"
+  },
+  "NA17": {
+    "name": "Columbia Plateau & Blue Mountains",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/columbia-plateau-blue-mountains-na17/"
+  },
+  "NA18": {
+    "name": "Great Basin & Columbia Steppe",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/great-basin-columbia-steppe-na18/"
+  },
+  "NA19": {
+    "name": "Colorado Plateau & Mountain Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/colorado-plateau-mountain-forests-na19/"
+  },
+  "NA20": {
+    "name": "Southern Prairie Mixed Grasslands",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Central Great Plains",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southern-prairie-mixed-grasslands-na20/"
+  },
+  "NA21": {
+    "name": "Midwestern Tallgrass Prairie & Forest Transition",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Central Great Plains",
+    "oneearth_url": "https://www.oneearth.org/bioregions/midwestern-tallgrass-prairie-forest-transition-na21/"
+  },
+  "NA22": {
+    "name": "Ozarks Mixed Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Central United States",
+    "oneearth_url": "https://www.oneearth.org/bioregions/ozarks-mixed-forests-na22/"
+  },
+  "NA23": {
+    "name": "Interior Plateau & Southern Great Lakes Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Central United States",
+    "oneearth_url": "https://www.oneearth.org/bioregions/interior-plateau-southern-great-lakes-forests-na23/"
+  },
+  "NA24": {
+    "name": "Appalachia & Allegheny Interior Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Eastern North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/appalachia-allegheny-interior-forests-na24/"
+  },
+  "NA25": {
+    "name": "Southeast Savannas & Riparian Forests",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Southeastern North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southeast-savannas-riparian-forests-na25/"
+  },
+  "NA26": {
+    "name": "Bermuda",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Atlantic Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/bermuda-na26/"
+  },
+  "NA27": {
+    "name": "Western Gulf Coastal Grasslands",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Gulf Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/western-gulf-coastal-grasslands-na27/"
+  },
+  "NA28": {
+    "name": "Southern Mixed Forests & Blackland Prairies",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Southeastern North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southern-mixed-forests-blackland-prairies-na28/"
+  },
+  "NA29": {
+    "name": "Sierra Madre Forests & Mexican Drylands",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Mexico & Northern Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sierra-madre-forests-mexican-drylands-na29/"
+  },
+  "NA30": {
+    "name": "Baja California & Southern Deserts",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Mexico & Northern Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/baja-california-southern-deserts-na30/"
+  },
+  "NA31": {
+    "name": "Greater California",
+    "realm_code": "NA",
+    "realm_name": "Nearctic",
+    "subrealm_name": "Western North America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-california-na31/"
+  },
+  "NT01": {
+    "name": "Chilean Mixed Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Southern South America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/chilean-mixed-forests-nt01/"
+  },
+  "NT02": {
+    "name": "Patagonia Steppe & Low Mountains",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Southern South America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/patagonia-steppe-low-mountains-nt02/"
+  },
+  "NT03": {
+    "name": "Rio de la Plata Grasslands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "South American Grasslands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/rio-de-la-plata-grasslands-nt03/"
+  },
+  "NT04": {
+    "name": "Chaco Grasslands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "South American Grasslands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/chaco-grasslands-nt04/"
+  },
+  "NT05": {
+    "name": "Andean Mountain Grasslands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/andean-mountain-grasslands-nt05/"
+  },
+  "NT06": {
+    "name": "Chilean Matorral Shrublands & Savanna",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/chilean-matorral-shrublands-savanna-nt06/"
+  },
+  "NT07": {
+    "name": "Juan Fernández & Desventuradas Islands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/juan-fernandez-desventuradas-islands-nt07/"
+  },
+  "NT08": {
+    "name": "South American Coastal Deserts",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-american-coastal-deserts-nt08/"
+  },
+  "NT09": {
+    "name": "Galápagos Islands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/galapagos-islands-nt09/"
+  },
+  "NT10": {
+    "name": "Ecuadorean Dry Coastal Forests & Flooded Grasslands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/ecuadorean-dry-coastal-forests-flooded-grasslands-nt10/"
+  },
+  "NT11": {
+    "name": "Andean Mountain Forests & Valleys",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Andes & Pacific Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/andean-mountain-forests-valleys-nt11/"
+  },
+  "NT12": {
+    "name": "Pantanal Flooded Grasslands & Dry Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Brazil & Atlantic Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/pantanal-flooded-grasslands-dry-forests-nt12/"
+  },
+  "NT13": {
+    "name": "Cerrado Savannas",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Brazil & Atlantic Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/cerrado-savannas-nt13/"
+  },
+  "NT14": {
+    "name": "Brazilian Atlantic Moist Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Brazil & Atlantic Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/brazilian-atlantic-moist-forests-nt14/"
+  },
+  "NT15": {
+    "name": "Brazilian Atlantic Dry Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Brazil & Atlantic Coast",
+    "oneearth_url": "https://www.oneearth.org/bioregions/brazilian-atlantic-dry-forests-nt15/"
+  },
+  "NT16": {
+    "name": "Amazon River Estuary",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/amazon-river-estuary-nt16/"
+  },
+  "NT17": {
+    "name": "Southern Amazonian Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southern-amazonian-forests-nt17/"
+  },
+  "NT18": {
+    "name": "Western Amazonian Forests & Plains",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/western-amazonian-forests-plains-nt18/"
+  },
+  "NT19": {
+    "name": "Central Amazonian Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-amazonian-forests-nt19/"
+  },
+  "NT20": {
+    "name": "Northern Amazonian Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northern-amazonian-forests-nt20/"
+  },
+  "NT21": {
+    "name": "Guianan Forests & Savanna",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Amazonia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/guianan-forests-savanna-nt21/"
+  },
+  "NT22": {
+    "name": "Llanos & Dry Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Upper South America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/llanos-dry-forests-nt22/"
+  },
+  "NT23": {
+    "name": "Venezuelan Coast",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Upper South America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/venezuelan-coast-nt23/"
+  },
+  "NT24": {
+    "name": "Central American Isthmian & Colombian Coastal Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-american-isthmian-colombian-coastal-forests-nt24/"
+  },
+  "NT25": {
+    "name": "Central American Mixed Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-american-mixed-forests-nt25/"
+  },
+  "NT26": {
+    "name": "Caribbean Islands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Caribbean",
+    "oneearth_url": "https://www.oneearth.org/bioregions/caribbean-islands-nt26/"
+  },
+  "NT27": {
+    "name": "Yucatan & Veracruz Mixed Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/yucatan-veracruz-mixed-forests-nt27/"
+  },
+  "NT28": {
+    "name": "Mexican Dry & Coniferous Forests",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mexican-dry-coniferous-forests-nt28/"
+  },
+  "NT29": {
+    "name": "Mexican Subtropical Islands",
+    "realm_code": "NT",
+    "realm_name": "Neotropic",
+    "subrealm_name": "Central America",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mexican-subtropical-islands-nt29/"
+  },
+  "OC01": {
+    "name": "Salas y Gómez & Easter Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "East Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/salas-y-g-mez-easter-islands-oc01/"
+  },
+  "OC02": {
+    "name": "Marquesas Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "East Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/marquesas-tropical-islands-oc02/"
+  },
+  "OC03": {
+    "name": "Southeast Polynesian Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "East Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southeast-polynesian-islands-oc03/"
+  },
+  "OC04": {
+    "name": "Central Polynesian Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Central Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-polynesian-islands-oc04/"
+  },
+  "OC05": {
+    "name": "Samoa & West Polynesian Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "West Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/samoa-west-polynesian-tropical-islands-oc05/"
+  },
+  "OC06": {
+    "name": "Fiji & Tongan Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "West Polynesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/fiji-tongan-tropical-islands-oc06/"
+  },
+  "OC07": {
+    "name": "East Micronesian Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Micronesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/east-micronesian-islands-oc07/"
+  },
+  "OC08": {
+    "name": "Palau & Caroline Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Micronesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/palau-caroline-tropical-islands-oc08/"
+  },
+  "OC09": {
+    "name": "Guam & Marianas Dry Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Micronesia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/guam-marianas-dry-tropical-islands-oc09/"
+  },
+  "OC10": {
+    "name": "Ogasawara Subtropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Northwest Pacific Islands",
+    "oneearth_url": "https://www.oneearth.org/bioregions/ogasawara-subtropical-islands-oc10/"
+  },
+  "OC11": {
+    "name": "Hawai'i Tropical Islands",
+    "realm_code": "OC",
+    "realm_name": "Oceanian",
+    "subrealm_name": "Hawaii",
+    "oneearth_url": "https://www.oneearth.org/bioregions/hawaii-tropical-islands-oc11/"
+  },
+  "PA01": {
+    "name": "Russian Arctic Desert Islands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/russian-arctic-desert-islands-pa01/"
+  },
+  "PA02": {
+    "name": "Iceland",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/iceland-pa02/"
+  },
+  "PA03": {
+    "name": "Scandinavian Birch & Coastal Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/scandinavian-birch-coastal-conifer-forests-pa03/"
+  },
+  "PA04": {
+    "name": "Greater Eurasian Tundra",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-eurasian-tundra-pa04/"
+  },
+  "PA05": {
+    "name": "East Eurasian Coastal Tundra",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/east-eurasian-coastal-tundra-pa05/"
+  },
+  "PA06": {
+    "name": "Sea of Okhotsk Coastal Taiga, Meadows & Tundra",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sea-of-okhotsk-coastal-taiga-meadows-tundra-pa06/"
+  },
+  "PA07": {
+    "name": "Siberian Boreal Forests & Mountain Tundra",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/siberian-boreal-forests-mountain-tundra-pa07/"
+  },
+  "PA08": {
+    "name": "Ural Mountains & West Eurasian Taiga Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Subarctic Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/ural-mountains-west-eurasian-taiga-forests-pa08/"
+  },
+  "PA09": {
+    "name": "Great Britain, Ireland & Faroe Islands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/great-britain-ireland-faroe-islands-pa09/"
+  },
+  "PA10": {
+    "name": "West European Coastal Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/west-european-coastal-mixed-forests-pa10/"
+  },
+  "PA11": {
+    "name": "Baltic Sea & Sarmatic Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/baltic-sea-sarmatic-mixed-forests-pa11/"
+  },
+  "PA12": {
+    "name": "European Interior Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/european-interior-mixed-forests-pa12/"
+  },
+  "PA13": {
+    "name": "Alps & Po Basin Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/alps-po-basin-mixed-forests-pa13/"
+  },
+  "PA14": {
+    "name": "Carpathian Mountain & Plains Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/carpathian-mountain-plains-mixed-forests-pa14/"
+  },
+  "PA15": {
+    "name": "Dinaric Mountains & Balkan Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/dinaric-mountains-balkan-mixed-forests-pa15/"
+  },
+  "PA16": {
+    "name": "Pontic Steppe Grasslands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/pontic-steppe-grasslands-pa16/"
+  },
+  "PA17": {
+    "name": "Black Sea, Caucasus-Anatolian Mixed Forests & Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/black-sea-caucasus-anatolian-mixed-forests-steppe-pa17/"
+  },
+  "PA18": {
+    "name": "Aegean Sea & East Mediterranean Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/aegean-sea-east-mediterranean-mixed-forests-pa18/"
+  },
+  "PA19": {
+    "name": "Adriatic Sea & Central Mediterranean Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/adriatic-sea-central-mediterranean-mixed-forests-pa19/"
+  },
+  "PA20": {
+    "name": "Balearic Sea & West Mediterranean Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/balearic-sea-west-mediterranean-mixed-forests-pa20/"
+  },
+  "PA21": {
+    "name": "Azores Forest Islands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/azores-forest-islands-pa21/"
+  },
+  "PA22": {
+    "name": "Madeira Evergreen Island",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Western Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/madeira-evergreen-island-pa22/"
+  },
+  "PA23": {
+    "name": "South Mediterranean Mixed Woodlands & Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-mediterranean-mixed-woodlands-forests-pa23/"
+  },
+  "PA24": {
+    "name": "Northern Sahara Deserts, Savannas & Marshes",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/northern-sahara-deserts-savannas-marshes-pa24/"
+  },
+  "PA25": {
+    "name": "Southern Sahara Deserts & Mountain Woodlands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/southern-sahara-deserts-mountain-woodlands-pa25/"
+  },
+  "PA26": {
+    "name": "Red Sea, Arabian Deserts & Salt Marshes",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/red-sea-arabian-deserts-salt-marshes-pa26/"
+  },
+  "PA27": {
+    "name": "Zagros Mountain Forests & East Anatolian Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/zagros-mountain-forests-east-anatolian-steppe-pa27/"
+  },
+  "PA28": {
+    "name": "South Caspian Coastal & Mountain Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/south-caspian-coastal-mountain-mixed-forests-pa28/"
+  },
+  "PA29": {
+    "name": "Persian Deserts & Mountain Woodlands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Mediterranean & North Africa",
+    "oneearth_url": "https://www.oneearth.org/bioregions/persian-deserts-mountain-woodlands-pa29/"
+  },
+  "PA30": {
+    "name": "Afghan-Balochistan Drylands, Mountain Meadows & Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/afghan-balochistan-drylands-mountain-meadows-conifer-forests-pa30/"
+  },
+  "PA31": {
+    "name": "Tian Shan-Pamir Grasslands, Mountain Steppe & Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/tian-shan-pamir-grasslands-mountain-steppe-conifer-forests-pa31/"
+  },
+  "PA32": {
+    "name": "Central Asian Deserts & Riparian Woodlands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/central-asian-deserts-riparian-woodlands-pa32/"
+  },
+  "PA33": {
+    "name": "Caspian Sea, Coastal Deserts & Kopet Dagh Mountain Woodlands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/caspian-sea-coastal-deserts-kopet-dagh-mountain-woodlands-pa33/"
+  },
+  "PA34": {
+    "name": "Kazakh Forest Steppe & Grasslands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/kazakh-forest-steppe-grasslands-pa34/"
+  },
+  "PA35": {
+    "name": "Siberian Hemiboreal Forests & Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/siberian-hemiboreal-forests-steppe-pa35/"
+  },
+  "PA36": {
+    "name": "Sayan Mountain Conifer Forests, Alpine Meadows & Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sayan-mountain-conifer-forests-alpine-meadows-steppe-pa36/"
+  },
+  "PA37": {
+    "name": "Altai Mountains & Ermin Valley",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/altai-mountains-ermin-valley-pa37/"
+  },
+  "PA38": {
+    "name": "Junggar Semi-Desert & Ermin Valley Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Central Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/junggar-semi-desert-ermin-valley-steppe-pa38/"
+  },
+  "PA39": {
+    "name": "Taklimakan Desert & Lowland Deciduous Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/taklimakan-desert-lowland-deciduous-forests-pa39/"
+  },
+  "PA40": {
+    "name": "Greater Tibetan Plateau Alpine Meadows & Shrublands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-tibetan-plateau-alpine-meadows-shrublands-pa40/"
+  },
+  "PA41": {
+    "name": "Himalayan-Pamir Alpine Shrub & Meadows",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/himalayan-pamir-alpine-shrub-meadows-pa41/"
+  },
+  "PA42": {
+    "name": "Ordos Plateau Steppe & Mountain Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/ordos-plateau-steppe-mountain-conifer-forests-pa42/"
+  },
+  "PA43": {
+    "name": "Greater Gobi Desert",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/greater-gobi-desert-pa43/"
+  },
+  "PA44": {
+    "name": "Mongolian Grasslands, Alpine Meadows & Forest Steppe",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/mongolian-grasslands-alpine-meadows-forest-steppe-pa44/"
+  },
+  "PA45": {
+    "name": "Dzhagdy Mountain Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/dzhagdy-mountain-conifer-forests-pa45/"
+  },
+  "PA46": {
+    "name": "Manchuria-Ussuri Mixed Forests & Meadow Steppes",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/manchuria-ussuri-mixed-forests-meadow-steppes-pa46/"
+  },
+  "PA47": {
+    "name": "Japan Forest Islands",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/japan-forest-islands-pa47/"
+  },
+  "PA48": {
+    "name": "Korean Peninsula Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/korean-peninsula-mixed-forests-pa48/"
+  },
+  "PA49": {
+    "name": "Loess Plateau & Huang He Plain Mixed Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/loess-plateau-huang-he-plain-mixed-forests-pa49/"
+  },
+  "PA50": {
+    "name": "Chang Jiang Plain Evergreen Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/chang-jiang-plain-evergreen-forests-pa50/"
+  },
+  "PA51": {
+    "name": "Sichuan Basin & Central Mountain Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/sichuan-basin-central-mountain-forests-pa51/"
+  },
+  "PA52": {
+    "name": "Guizhou & Yunnan Subtropical Forest Plateaus",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/guizhou-yunnan-subtropical-forest-plateaus-pa52/"
+  },
+  "PA53": {
+    "name": "Hengduan Mountain Conifer Forests",
+    "realm_code": "PA",
+    "realm_name": "Palearctic",
+    "subrealm_name": "Eastern Eurasia",
+    "oneearth_url": "https://www.oneearth.org/bioregions/hengduan-mountain-conifer-forests-pa53/"
+  }
+}
