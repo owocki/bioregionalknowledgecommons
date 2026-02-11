@@ -194,7 +194,7 @@ export default function ControlPanel() {
                   </h4>
                   <div className="flex gap-1">
                     <ViewModeButton mode="globe" currentMode={viewMode} label="Globe" onSelect={setViewMode} icon={<GlobeIcon />} />
-                    <ViewModeButton mode="map" currentMode={viewMode} label="Map" onSelect={setViewMode} comingSoon icon={<MapIcon />} />
+                    <ViewModeButton mode="map" currentMode={viewMode} label="Map" onSelect={setViewMode} icon={<MapIcon />} />
                     <ViewModeButton mode="list" currentMode={viewMode} label="List" onSelect={setViewMode} icon={<ListIcon />} />
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function ControlPanel() {
             </h4>
             <div className="flex gap-1">
               <ViewModeButton mode="globe" currentMode={viewMode} label="Globe" onSelect={setViewMode} icon={<GlobeIcon />} />
-              <ViewModeButton mode="map" currentMode={viewMode} label="Map" onSelect={setViewMode} comingSoon icon={<MapIcon />} />
+              <ViewModeButton mode="map" currentMode={viewMode} label="Map" onSelect={setViewMode} icon={<MapIcon />} />
               <ViewModeButton mode="list" currentMode={viewMode} label="List" onSelect={setViewMode} icon={<ListIcon />} />
             </div>
           </div>

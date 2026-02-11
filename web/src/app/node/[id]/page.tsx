@@ -6,6 +6,11 @@ interface NodePageProps {
   params: Promise<{ id: string }>;
 }
 
+/** Pre-generate pages for all seed nodes (required for static export) */
+export function generateStaticParams() {
+  return seedNodes.map((node) => ({ id: node.node_id }));
+}
+
 export async function generateMetadata({
   params,
 }: NodePageProps): Promise<Metadata> {

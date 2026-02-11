@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { BioregionInfo, BioregionLookup } from '@/types';
 import { haversineDistance } from '@/lib/geo-utils';
+import { assetPath } from '@/lib/constants';
 import { useGlobeStore } from '@/stores/globeStore';
 
 interface BioregionDetectionResult {
@@ -28,7 +29,7 @@ export function useBioregionDetection(
 
   // Load full bioregion lookup on mount
   useEffect(() => {
-    fetch('/data/bioregion-lookup.json')
+    fetch(assetPath('/data/bioregion-lookup.json'))
       .then((res) => res.json())
       .then((data: BioregionLookup) => setFullLookup(data))
       .catch((err) => console.error('Failed to load bioregion lookup:', err));

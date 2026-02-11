@@ -1,38 +1,22 @@
 import type { NextConfig } from "next";
 
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+
 const nextConfig: NextConfig = {
-  // SWC minification is always enabled in Next.js 15+
+  // Static export for GitHub Pages
+  output: 'export',
 
-  // Image optimization configuration
+  // GitHub Pages serves at /bioregionalknowledgecommons/
+  basePath: isGitHubPages ? '/bioregionalknowledgecommons' : '',
+  assetPrefix: isGitHubPages ? '/bioregionalknowledgecommons/' : undefined,
+
+  // Image optimization must be disabled for static export
   images: {
-    formats: ['image/avif', 'image/webp'],
+    unoptimized: true,
   },
 
-  // Response headers for caching and performance
-  async headers() {
-    return [
-      {
-        // Cache static JSON data files (bioregions, lookup, etc.)
-        source: '/data/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, immutable',
-          },
-        ],
-      },
-      {
-        // Cache static assets (fonts, images, etc.)
-        source: '/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff|woff2)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-    ];
-  },
+  // Trailing slashes help with static file serving on GitHub Pages
+  trailingSlash: true,
 };
 
 export default nextConfig;

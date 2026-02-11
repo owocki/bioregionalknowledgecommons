@@ -5,6 +5,7 @@ import { useFrame, ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
 import earcut from 'earcut';
 import { latLngToVector3 } from '@/lib/geo-utils';
+import { assetPath } from '@/lib/constants';
 import { REALM_COLORS, type Realm } from '@/types';
 import { useGlobeStore } from '@/stores/globeStore';
 import { seedNodes } from '@/data/seed-registry';
@@ -166,7 +167,7 @@ export default function BioregionLayer() {
 
   // Load GeoJSON on mount
   useEffect(() => {
-    fetch('/data/bioregions-simplified.json')
+    fetch(assetPath('/data/bioregions-simplified.json'))
       .then((res) => res.json())
       .then((data: BioregionGeoJSON) => setGeoData(data))
       .catch((err) => console.error('Failed to load bioregion data:', err));
@@ -174,7 +175,7 @@ export default function BioregionLayer() {
 
   // Load centroids for flying to bioregions
   useEffect(() => {
-    fetch('/data/bioregion-lookup.json')
+    fetch(assetPath('/data/bioregion-lookup.json'))
       .then((res) => res.json())
       .then((data: Record<string, { centroid: [number, number] }>) => {
         const centroids: Record<string, [number, number]> = {};

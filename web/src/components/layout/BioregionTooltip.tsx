@@ -4,6 +4,7 @@ import { useMemo, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGlobeStore } from '@/stores/globeStore';
 import { seedNodes } from '@/data/seed-registry';
+import { assetPath } from '@/lib/constants';
 import { REALM_COLORS, type BioregionInfo, type BioregionLookup } from '@/types';
 
 export default function BioregionTooltip() {
@@ -13,7 +14,7 @@ export default function BioregionTooltip() {
 
   // Load full bioregion lookup (all 185 bioregions)
   useEffect(() => {
-    fetch('/data/bioregion-lookup.json')
+    fetch(assetPath('/data/bioregion-lookup.json'))
       .then((res) => res.json())
       .then((data: BioregionLookup) => setFullLookup(data))
       .catch(() => {});

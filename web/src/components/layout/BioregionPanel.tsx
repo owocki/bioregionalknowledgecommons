@@ -4,6 +4,7 @@ import { useEffect, useCallback, useRef, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGlobeStore } from '@/stores/globeStore';
 import { seedNodes } from '@/data/seed-registry';
+import { assetPath } from '@/lib/constants';
 import { REALM_COLORS, DOMAIN_COLORS, type BioregionInfo, type BioregionLookup, type NodeEntry } from '@/types';
 
 /** Detect if current viewport is mobile (< 640px) */
@@ -30,7 +31,7 @@ export default function BioregionPanel() {
 
   // Load full bioregion lookup
   useEffect(() => {
-    fetch('/data/bioregion-lookup.json')
+    fetch(assetPath('/data/bioregion-lookup.json'))
       .then((res) => res.json())
       .then((data: BioregionLookup) => setFullLookup(data))
       .catch(() => {});

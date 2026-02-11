@@ -6,6 +6,11 @@ interface BioregionPageProps {
   params: Promise<{ code: string }>;
 }
 
+/** Pre-generate pages for all bioregions in the lookup (required for static export) */
+export function generateStaticParams() {
+  return Object.keys(bioregionLookup).map((code) => ({ code }));
+}
+
 export async function generateMetadata({
   params,
 }: BioregionPageProps): Promise<Metadata> {

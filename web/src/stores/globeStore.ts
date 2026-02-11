@@ -27,6 +27,7 @@ interface GlobeStore extends GlobeState {
   /** Flow hover state for tooltip */
   hoveredFlow: HoveredFlow | null;
   setHoveredFlow: (flow: HoveredFlow | null) => void;
+  setShowOnboarding: (show: boolean) => void;
 }
 
 const initialState: GlobeState = {
@@ -39,6 +40,7 @@ const initialState: GlobeState = {
   showFlowArcs: true,
   showBridges: true,
   showBioregions: true,
+  showOnboarding: false,
   viewMode: 'globe',
   searchQuery: '',
   filters: {
@@ -77,4 +79,5 @@ export const useGlobeStore = create<GlobeStore>((set) => ({
     set({
       filters: { realms: [], domains: [], activityDays: null, minBridges: 0 },
     }),
+  setShowOnboarding: (show) => set({ showOnboarding: show }),
 }));

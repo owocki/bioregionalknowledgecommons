@@ -5,6 +5,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import GlobeCore from './GlobeCore';
+import PoliticalBoundaries from './PoliticalBoundaries';
+import CityLabels from './CityLabels';
 import BioregionLayer from './BioregionLayer';
 import NodeMarkers from './NodeMarkers';
 import FlowArcs from './FlowArcs';
@@ -65,6 +67,12 @@ export default function GlobeScene() {
         <Suspense fallback={null}>
           {/* Globe sphere + atmosphere */}
           <GlobeCore />
+
+          {/* Political boundaries (countries + states) */}
+          <PoliticalBoundaries />
+
+          {/* City labels */}
+          <CityLabels />
 
           {/* Bioregion translucent patches */}
           <BioregionLayer />

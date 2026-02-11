@@ -15,6 +15,26 @@ export const CAMERA_ZOOM_DISTANCE = 2.0;
 export const ANIMATION_DURATION = 1.8;
 
 // ============================================================
+// Base Path (for GitHub Pages deployment)
+// ============================================================
+
+/**
+ * Returns the Next.js basePath at runtime.
+ * In production on GitHub Pages this will be '/bioregionalknowledgecommons',
+ * in local dev it will be ''.
+ */
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+/**
+ * Prefix a public asset path with the basePath.
+ * Usage: assetPath('/data/foo.json') → '/bioregionalknowledgecommons/data/foo.json' (prod)
+ *                                    → '/data/foo.json' (dev)
+ */
+export function assetPath(path: string): string {
+  return `${BASE_PATH}${path}`;
+}
+
+// ============================================================
 // Data URLs (served from /public)
 // ============================================================
 

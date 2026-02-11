@@ -58,6 +58,24 @@ const ListView = dynamic(
   { ssr: false }
 );
 
+// 2D Map view - MapLibre GL
+const MapView = dynamic(
+  () => import('@/components/map/MapView').then((mod) => mod.default),
+  { ssr: false }
+);
+
+// Onboarding wizard
+const OnboardingWizard = dynamic(
+  () => import('@/components/onboarding/OnboardingWizard').then((mod) => mod.default),
+  { ssr: false }
+);
+
+// Welcome tile - floating context card for first-time visitors
+const WelcomeTile = dynamic(
+  () => import('@/components/layout/WelcomeTile').then((mod) => mod.default),
+  { ssr: false }
+);
+
 function GlobeLoadingFallback() {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-950" role="status">
@@ -150,10 +168,14 @@ export default function HomePage() {
       role="application"
       aria-label="Bioregional Knowledge Commons Visualizer"
     >
-      {/* View mode: Globe (default) or List */}
+      {/* View mode: Globe (default), Map (2D), or List */}
       {viewMode === 'list' ? (
         <div className="absolute inset-0 overflow-y-auto">
           <ListView />
+        </div>
+      ) : viewMode === 'map' ? (
+        <div className="absolute inset-0">
+          <MapView />
         </div>
       ) : (
         <Suspense fallback={<GlobeLoadingFallback />}>
@@ -179,7 +201,27 @@ export default function HomePage() {
             by OpenCivics
           </p>
         </div>
+        {/* Help button — re-shows the welcome tile */}
+        <button
+          onClick={() => window.dispatchEvent(new Event('reshow-welcome'))}
+          className="
+            h-6 w-6 rounded-full
+            bg-gray-800/60 border border-gray-700/40
+            flex items-center justify-center
+            text-[11px] font-semibold text-gray-500
+            hover:text-gray-300 hover:border-gray-600 hover:bg-gray-700/60
+            transition-colors duration-150
+            cursor-pointer focus-ring
+          "
+          aria-label="Show welcome info"
+          title="Show welcome info"
+        >
+          ?
+        </button>
       </div>
+
+      {/* Welcome tile - floating context card for first-time visitors */}
+      <WelcomeTile />
 
       {/* Search overlay - top center */}
       <SearchOverlay />
@@ -204,6 +246,9 @@ export default function HomePage() {
 
       {/* Start a Commons CTA - bottom right */}
       <StartCommonsButton />
+
+      {/* Onboarding wizard */}
+      <OnboardingWizard />
 
       {/* Keyboard shortcuts overlay */}
       <AnimatePresence>

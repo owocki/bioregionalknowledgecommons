@@ -162,6 +162,7 @@ export interface GlobeState {
   showFlowArcs: boolean;
   showBridges: boolean;
   showBioregions: boolean;
+  showOnboarding: boolean;
   viewMode: 'globe' | 'map' | 'list';
   searchQuery: string;
   filters: GlobeFilters;
