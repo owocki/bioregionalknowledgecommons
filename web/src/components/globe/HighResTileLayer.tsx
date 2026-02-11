@@ -266,9 +266,10 @@ export default function HighResTileLayer() {
     if (now - lastUpdate.current < 100) return;
     lastUpdate.current = now;
 
-    // Get the point on the globe the camera is looking at
-    // Camera position points from origin to camera, so -camera.position points to the near surface
-    const lookAtPoint = camera.position.clone().negate().normalize();
+    // Get the point on the globe that's facing the camera
+    // Camera position vector points from origin toward camera
+    // The point on the globe closest to camera is in the SAME direction (not negated)
+    const lookAtPoint = camera.position.clone().normalize();
     const { lat, lng } = vector3ToLatLng(lookAtPoint);
 
     // Calculate zoom level based on distance
