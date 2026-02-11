@@ -1,4 +1,49 @@
-import type { NodeEntry, RegistryData, FlowData, BioregionInfo, BioregionLookup, BridgeEntry } from '@/types';
+import type { NodeEntry, RegistryData, FlowData, BioregionInfo, BioregionLookup, BridgeEntry, EcoregionInfo } from '@/types';
+
+// ============================================================
+// Ecoregion Data — sub-regions within each bioregion (holonic)
+// Based on RESOLVE Ecoregions 2017 classification
+// ============================================================
+
+export const seedEcoregions: EcoregionInfo[] = [
+  // NA19 — Colorado Plateau & Mountain Forests
+  { eco_id: 19001, eco_name: 'Colorado Plateau Shrublands', biome: 'Deserts & Xeric Shrublands', bioregion_code: 'NA19' },
+  { eco_id: 19002, eco_name: 'Colorado Rockies Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA19' },
+  { eco_id: 19003, eco_name: 'Arizona Mountains Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA19' },
+  { eco_id: 19004, eco_name: 'Wasatch & Uinta Montane Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA19' },
+
+  // NA15 — Sierra Nevada & California Chaparral
+  { eco_id: 15001, eco_name: 'Sierra Nevada Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA15' },
+  { eco_id: 15002, eco_name: 'California Interior Chaparral & Woodlands', biome: 'Mediterranean Forests', bioregion_code: 'NA15' },
+  { eco_id: 15003, eco_name: 'California Montane Chaparral & Woodlands', biome: 'Mediterranean Forests', bioregion_code: 'NA15' },
+
+  // NA08 — Pacific Northwest Coastal Forests
+  { eco_id: 8001, eco_name: 'Puget Lowland Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA08' },
+  { eco_id: 8002, eco_name: 'Central Pacific Coastal Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA08' },
+  { eco_id: 8003, eco_name: 'Willamette Valley Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA08' },
+  { eco_id: 8004, eco_name: 'British Columbia Mainland Coastal Forests', biome: 'Temperate Conifer Forests', bioregion_code: 'NA08' },
+
+  // NA22 — Great Lakes & St. Lawrence Forests
+  { eco_id: 22001, eco_name: 'Southern Great Lakes Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA22' },
+  { eco_id: 22002, eco_name: 'Eastern Great Lakes Lowland Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA22' },
+  { eco_id: 22003, eco_name: 'Upper Midwest Forest-Savanna Transition', biome: 'Temperate Grasslands', bioregion_code: 'NA22' },
+  { eco_id: 22004, eco_name: 'Western Great Lakes Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA22' },
+
+  // NA25 — Mid-Atlantic Coastal Forests
+  { eco_id: 25001, eco_name: 'Mid-Atlantic Coastal Plain Mixed Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA25' },
+  { eco_id: 25002, eco_name: 'Chesapeake Bay Lowland Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA25' },
+  { eco_id: 25003, eco_name: 'Appalachian Mixed Mesophytic Forests', biome: 'Temperate Broadleaf & Mixed Forests', bioregion_code: 'NA25' },
+];
+
+/** Get all ecoregions for a given bioregion code */
+export function getEcoregionsForBioregion(bioregionCode: string): EcoregionInfo[] {
+  return seedEcoregions.filter((eco) => eco.bioregion_code === bioregionCode);
+}
+
+/** Get a single ecoregion by ID */
+export function getEcoregionById(ecoId: number): EcoregionInfo | null {
+  return seedEcoregions.find((eco) => eco.eco_id === ecoId) ?? null;
+}
 
 // ============================================================
 // Seed Node Registry Data
@@ -21,6 +66,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-01-15T00:00:00Z',
     maintainers: ['opencivics-team', 'watershed-steward'],
+    geo_classification: {
+      realm: 'Nearctic', realm_code: 'NA', subrealm: 'Western North America',
+      bioregion: 'Colorado Plateau & Mountain Forests', bioregion_code: 'NA19',
+      ecoregion: 'Colorado Plateau Shrublands', ecoregion_id: 19001, biome: 'Deserts & Xeric Shrublands',
+    },
   },
   {
     node_id: 'a1b2c3d4-2222-4000-8000-000000000002',
@@ -38,6 +88,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-01-20T00:00:00Z',
     maintainers: ['sierra-steward'],
+    geo_classification: {
+      realm: 'Nearctic', realm_code: 'NA', subrealm: 'Western North America',
+      bioregion: 'Sierra Nevada & California Chaparral', bioregion_code: 'NA15',
+      ecoregion: 'Sierra Nevada Forests', ecoregion_id: 15001, biome: 'Temperate Conifer Forests',
+    },
   },
   {
     node_id: 'a1b2c3d4-3333-4000-8000-000000000003',
@@ -55,6 +110,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true, telegram: '@cascadia_commons_bot' },
     created_at: '2026-01-25T00:00:00Z',
     maintainers: ['cascadia-council', 'opencivics-team'],
+    geo_classification: {
+      realm: 'Nearctic', realm_code: 'NA', subrealm: 'Western North America',
+      bioregion: 'Pacific Northwest Coastal Forests', bioregion_code: 'NA08',
+      ecoregion: 'Puget Lowland Forests', ecoregion_id: 8001, biome: 'Temperate Broadleaf & Mixed Forests',
+    },
   },
   {
     node_id: 'a1b2c3d4-4444-4000-8000-000000000004',
@@ -72,6 +132,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-02-01T00:00:00Z',
     maintainers: ['greatlakes-steward'],
+    geo_classification: {
+      realm: 'Nearctic', realm_code: 'NA', subrealm: 'Eastern North America',
+      bioregion: 'Great Lakes & St. Lawrence Forests', bioregion_code: 'NA22',
+      ecoregion: 'Southern Great Lakes Forests', ecoregion_id: 22001, biome: 'Temperate Broadleaf & Mixed Forests',
+    },
   },
   {
     node_id: 'a1b2c3d4-5555-4000-8000-000000000005',
@@ -89,6 +154,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-02-05T00:00:00Z',
     maintainers: ['chesapeake-steward', 'opencivics-team'],
+    geo_classification: {
+      realm: 'Nearctic', realm_code: 'NA', subrealm: 'Eastern North America',
+      bioregion: 'Mid-Atlantic Coastal Forests', bioregion_code: 'NA25',
+      ecoregion: 'Chesapeake Bay Lowland Forests', ecoregion_id: 25002, biome: 'Temperate Broadleaf & Mixed Forests',
+    },
   },
 ];
 

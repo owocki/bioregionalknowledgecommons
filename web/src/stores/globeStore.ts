@@ -18,6 +18,9 @@ interface GlobeStore extends GlobeState {
   toggleFlowArcs: () => void;
   toggleBridges: () => void;
   toggleBioregions: () => void;
+  toggleEcoregions: () => void;
+  togglePlaceNames: () => void;
+  toggleSatelliteImagery: () => void;
   setViewMode: (mode: 'globe' | 'map' | 'list') => void;
   setSearchQuery: (query: string) => void;
   setRealmFilter: (realms: Realm[]) => void;
@@ -27,7 +30,13 @@ interface GlobeStore extends GlobeState {
   /** Flow hover state for tooltip */
   hoveredFlow: HoveredFlow | null;
   setHoveredFlow: (flow: HoveredFlow | null) => void;
+  setSelectedEcoregion: (ecoId: number | null) => void;
   setShowOnboarding: (show: boolean) => void;
+  setIsDrawingBoundary: (drawing: boolean) => void;
+  addBoundaryPoint: (lngLat: [number, number]) => void;
+  undoBoundaryPoint: () => void;
+  clearBoundary: () => void;
+  setBoundary: (points: [number, number][]) => void;
 }
 
 const initialState: GlobeState = {
@@ -40,7 +49,13 @@ const initialState: GlobeState = {
   showFlowArcs: true,
   showBridges: true,
   showBioregions: true,
+  showEcoregions: true,
+  showPlaceNames: true,
+  showSatelliteImagery: true,
   showOnboarding: false,
+  selectedEcoregion: null,
+  onboardingBoundary: [],
+  isDrawingBoundary: false,
   viewMode: 'globe',
   searchQuery: '',
   filters: {
@@ -67,6 +82,9 @@ export const useGlobeStore = create<GlobeStore>((set) => ({
   toggleFlowArcs: () => set((s) => ({ showFlowArcs: !s.showFlowArcs })),
   toggleBridges: () => set((s) => ({ showBridges: !s.showBridges })),
   toggleBioregions: () => set((s) => ({ showBioregions: !s.showBioregions })),
+  toggleEcoregions: () => set((s) => ({ showEcoregions: !s.showEcoregions })),
+  togglePlaceNames: () => set((s) => ({ showPlaceNames: !s.showPlaceNames })),
+  toggleSatelliteImagery: () => set((s) => ({ showSatelliteImagery: !s.showSatelliteImagery })),
   setViewMode: (mode) => set({ viewMode: mode }),
   setSearchQuery: (query) => set({ searchQuery: query }),
   setRealmFilter: (realms) =>
@@ -79,5 +97,13 @@ export const useGlobeStore = create<GlobeStore>((set) => ({
     set({
       filters: { realms: [], domains: [], activityDays: null, minBridges: 0 },
     }),
+  setSelectedEcoregion: (ecoId) => set({ selectedEcoregion: ecoId }),
   setShowOnboarding: (show) => set({ showOnboarding: show }),
+  setIsDrawingBoundary: (drawing) => set({ isDrawingBoundary: drawing }),
+  addBoundaryPoint: (lngLat) =>
+    set((s) => ({ onboardingBoundary: [...s.onboardingBoundary, lngLat] })),
+  undoBoundaryPoint: () =>
+    set((s) => ({ onboardingBoundary: s.onboardingBoundary.slice(0, -1) })),
+  clearBoundary: () => set({ onboardingBoundary: [] }),
+  setBoundary: (points) => set({ onboardingBoundary: points }),
 }));

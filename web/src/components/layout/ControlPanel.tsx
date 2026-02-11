@@ -108,17 +108,23 @@ export default function ControlPanel() {
   const showFlowArcs = useGlobeStore((s) => s.showFlowArcs);
   const showBridges = useGlobeStore((s) => s.showBridges);
   const showBioregions = useGlobeStore((s) => s.showBioregions);
+  const showEcoregions = useGlobeStore((s) => s.showEcoregions);
+  const showPlaceNames = useGlobeStore((s) => s.showPlaceNames);
+  const showSatelliteImagery = useGlobeStore((s) => s.showSatelliteImagery);
   const viewMode = useGlobeStore((s) => s.viewMode);
   const toggleFlowArcs = useGlobeStore((s) => s.toggleFlowArcs);
   const toggleBridges = useGlobeStore((s) => s.toggleBridges);
   const toggleBioregions = useGlobeStore((s) => s.toggleBioregions);
+  const toggleEcoregions = useGlobeStore((s) => s.toggleEcoregions);
+  const togglePlaceNames = useGlobeStore((s) => s.togglePlaceNames);
+  const toggleSatelliteImagery = useGlobeStore((s) => s.toggleSatelliteImagery);
   const setViewMode = useGlobeStore((s) => s.setViewMode);
 
   // Mobile: collapsed / expanded state
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   // Count active layers for the badge
-  const activeLayers = [showFlowArcs, showBridges, showBioregions].filter(Boolean).length;
+  const activeLayers = [showFlowArcs, showBridges, showBioregions, showEcoregions, showPlaceNames, showSatelliteImagery].filter(Boolean).length;
 
   return (
     <motion.div
@@ -181,6 +187,24 @@ export default function ControlPanel() {
                     enabled={showBioregions}
                     onToggle={toggleBioregions}
                     icon={<MapIcon />}
+                  />
+                  <Toggle
+                    label="Ecoregions"
+                    enabled={showEcoregions}
+                    onToggle={toggleEcoregions}
+                    icon={<EcoregionIcon />}
+                  />
+                  <Toggle
+                    label="Place Names"
+                    enabled={showPlaceNames}
+                    onToggle={togglePlaceNames}
+                    icon={<PlaceNameIcon />}
+                  />
+                  <Toggle
+                    label="Satellite"
+                    enabled={showSatelliteImagery}
+                    onToggle={toggleSatelliteImagery}
+                    icon={<SatelliteIcon />}
                   />
                 </div>
 
@@ -250,6 +274,24 @@ export default function ControlPanel() {
               onToggle={toggleBioregions}
               icon={<MapIcon />}
             />
+            <Toggle
+              label="Ecoregions"
+              enabled={showEcoregions}
+              onToggle={toggleEcoregions}
+              icon={<EcoregionIcon />}
+            />
+            <Toggle
+              label="Place Names"
+              enabled={showPlaceNames}
+              onToggle={togglePlaceNames}
+              icon={<PlaceNameIcon />}
+            />
+            <Toggle
+              label="Satellite"
+              enabled={showSatelliteImagery}
+              onToggle={toggleSatelliteImagery}
+              icon={<SatelliteIcon />}
+            />
           </div>
 
           {/* Divider */}
@@ -310,6 +352,30 @@ function ListIcon() {
   return (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+    </svg>
+  );
+}
+
+function EcoregionIcon() {
+  return (
+    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+    </svg>
+  );
+}
+
+function PlaceNameIcon() {
+  return (
+    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+    </svg>
+  );
+}
+
+function SatelliteIcon() {
+  return (
+    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" />
     </svg>
   );
 }

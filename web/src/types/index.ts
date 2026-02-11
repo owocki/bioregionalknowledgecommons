@@ -20,6 +20,34 @@ export interface NodeEntry {
   interaction_channels: InteractionChannels;
   created_at: string;
   maintainers: string[];
+  /** User-drawn boundary polygon [[lng, lat], ...] */
+  territory_boundary?: [number, number][];
+  /** Full geographic classification resolved from territory centroid */
+  geo_classification?: GeoClassification;
+  /** GitHub username of the creator */
+  github_username?: string;
+  /** Description of the commons */
+  description?: string;
+}
+
+/** Holonic geographic classification: Realm > Subrealm > Bioregion > Ecoregion */
+export interface GeoClassification {
+  realm: string;
+  realm_code: string;
+  subrealm: string;
+  bioregion: string;
+  bioregion_code: string;
+  ecoregion?: string;
+  ecoregion_id?: number;
+  biome?: string;
+}
+
+/** An ecoregion is a sub-region within a bioregion */
+export interface EcoregionInfo {
+  eco_id: number;
+  eco_name: string;
+  biome: string;
+  bioregion_code: string;
 }
 
 export type ThematicDomain =
@@ -162,7 +190,16 @@ export interface GlobeState {
   showFlowArcs: boolean;
   showBridges: boolean;
   showBioregions: boolean;
+  showEcoregions: boolean;
+  showPlaceNames: boolean;
+  showSatelliteImagery: boolean;
   showOnboarding: boolean;
+  /** Boundary polygon being drawn during onboarding [[lng, lat], ...] */
+  onboardingBoundary: [number, number][];
+  /** Currently selected ecoregion (drilldown from bioregion panel) */
+  selectedEcoregion: number | null;
+  /** Whether the globe should accept clicks to add boundary points */
+  isDrawingBoundary: boolean;
   viewMode: 'globe' | 'map' | 'list';
   searchQuery: string;
   filters: GlobeFilters;

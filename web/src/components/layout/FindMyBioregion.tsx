@@ -11,8 +11,11 @@ import { useGlobeStore } from '@/stores/globeStore';
 
 const DISMISSED_KEY = 'bioregion-prompt-dismissed';
 
+const WELCOME_STORAGE_KEY = 'welcome-dismissed';
+
 export function FindMyBioregion() {
   const [dismissed, setDismissed] = useState(true); // Start hidden to avoid flash
+  const [welcomeActive, setWelcomeActive] = useState(true); // Hide while welcome tile is up
   const { location, error, isLoading, requestLocation } = useGeolocation();
   const { bioregion, distance, isDetecting } = useBioregionDetection(
     location?.lat ?? null,
@@ -26,6 +29,15 @@ export function FindMyBioregion() {
     if (typeof window === 'undefined') return;
     const wasDismissed = localStorage.getItem(DISMISSED_KEY);
     setDismissed(wasDismissed === 'true');
+
+    // Don't show if the welcome tile is still active
+    const welcomeDismissed = localStorage.getItem(WELCOME_STORAGE_KEY);
+    setWelcomeActive(welcomeDismissed !== 'true');
+
+    // Listen for when the welcome tile gets dismissed
+    const handleWelcomeDismissed = () => setWelcomeActive(false);
+    window.addEventListener('welcome-dismissed', handleWelcomeDismissed);
+    return () => window.removeEventListener('welcome-dismissed', handleWelcomeDismissed);
   }, []);
 
   const handleDismiss = () => {
@@ -56,7 +68,7 @@ export function FindMyBioregion() {
 
   const hasLocation = location !== null;
   const hasDetected = bioregion !== null;
-  const isVisible = !dismissed;
+  const isVisible = !dismissed && !welcomeActive;
 
   return (
     <AnimatePresence>

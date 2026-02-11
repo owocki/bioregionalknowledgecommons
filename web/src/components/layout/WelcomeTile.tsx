@@ -25,6 +25,8 @@ export default function WelcomeTile() {
   const dismiss = useCallback(() => {
     setShowWelcome(false);
     localStorage.setItem(STORAGE_KEY, 'true');
+    // Notify other components (e.g. FindMyBioregion) that welcome is gone
+    window.dispatchEvent(new Event('welcome-dismissed'));
   }, []);
 
   const handleExplore = useCallback(() => {

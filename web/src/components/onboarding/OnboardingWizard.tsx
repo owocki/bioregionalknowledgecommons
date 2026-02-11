@@ -7,9 +7,9 @@ import { seedNodes, bioregionLookup as seedBioregionLookup } from '@/data/seed-r
 import {
   DOMAIN_COLORS,
   REALM_COLORS,
-  type ThematicDomain,
   type BioregionInfo,
   type BioregionLookup,
+  type GeoClassification,
   type Realm,
 } from '@/types';
 import { assetPath } from '@/lib/constants';
@@ -18,14 +18,16 @@ import { assetPath } from '@/lib/constants';
 
 const TOTAL_STEPS = 6;
 
-const THEMATIC_DOMAINS: ThematicDomain[] = [
-  'watershed-governance',
-  'food-systems',
-  'cultural-heritage',
-  'ecological-restoration',
-  'community-governance',
-  'traditional-knowledge',
+const TAG_SUGGESTIONS = [
+  'watershed-governance', 'food-systems', 'cultural-heritage',
+  'ecological-restoration', 'community-governance', 'traditional-knowledge',
   'climate-resilience',
+  'water-rights', 'permaculture', 'seed-saving', 'land-trust',
+  'indigenous-sovereignty', 'urban-ecology', 'regenerative-agriculture',
+  'mycology', 'wildlife-corridors', 'renewable-energy', 'circular-economy',
+  'agroforestry', 'marine-conservation', 'soil-health', 'river-systems',
+  'pollinator-habitat', 'fire-ecology', 'wetland-restoration',
+  'cooperative-economics', 'biochar', 'composting', 'citizen-science',
 ];
 
 const DOMAIN_LABELS: Record<string, string> = {
@@ -46,6 +48,30 @@ const LAUNCH_MESSAGES = [
   'Registering with the commons network...',
   'Summoning your AI steward agent...',
 ];
+
+// ─── RESOLVE Ecoregions API ──────────────────────────────────────────
+const ECOREGION_API =
+  'https://data-gis.unep-wcmc.org/server/rest/services/Bio-geographicalRegions/Resolve_Ecoregions/FeatureServer/0/query';
+
+async function queryEcoregion(
+  lng: number,
+  lat: number,
+): Promise<{ eco_name: string; biome_name: string; eco_id: number } | null> {
+  try {
+    const geometry = encodeURIComponent(
+      JSON.stringify({ x: lng, y: lat, spatialReference: { wkid: 4326 } }),
+    );
+    const url = `${ECOREGION_API}?geometry=${geometry}&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&outFields=eco_name,biome_name,eco_id&returnGeometry=false&f=json`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.features?.[0]) {
+      return data.features[0].attributes;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 // ─── Slide animation variants ─────────────────────────────────────────
 
@@ -75,7 +101,7 @@ const primaryBtnClass =
 const secondaryBtnClass =
   'inline-flex items-center justify-center gap-2 rounded-xl bg-gray-800/60 border border-gray-700/40 px-5 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-700/60 transition-colors cursor-pointer';
 
-// ─── Helper ───────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────
 
 function haversineDistance(
   lat1: number,
@@ -92,6 +118,19 @@ function haversineDistance(
   return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 6371;
 }
 
+function approxPolygonAreaKm2(points: [number, number][]): number {
+  if (points.length < 3) return 0;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  let total = 0;
+  for (let i = 0; i < points.length; i++) {
+    const j = (i + 1) % points.length;
+    const [lng1, lat1] = points[i];
+    const [lng2, lat2] = points[j];
+    total += toRad(lng2 - lng1) * (2 + Math.sin(toRad(lat1)) + Math.sin(toRad(lat2)));
+  }
+  return Math.abs((total * 6371 * 6371) / 2);
+}
+
 // ═════════════════════════════════════════════════════════════════════
 // OnboardingWizard
 // ═════════════════════════════════════════════════════════════════════
@@ -101,6 +140,13 @@ export default function OnboardingWizard() {
   const setShowOnboarding = useGlobeStore((s) => s.setShowOnboarding);
   const flyTo = useGlobeStore((s) => s.flyTo);
 
+  // Globe boundary drawing state
+  const boundary = useGlobeStore((s) => s.onboardingBoundary);
+  const isDrawing = useGlobeStore((s) => s.isDrawingBoundary);
+  const setIsDrawing = useGlobeStore((s) => s.setIsDrawingBoundary);
+  const clearBoundary = useGlobeStore((s) => s.clearBoundary);
+  const undoBoundaryPoint = useGlobeStore((s) => s.undoBoundaryPoint);
+
   // ─── Wizard state ─────────────────────────────────────────────────
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -109,13 +155,15 @@ export default function OnboardingWizard() {
   const [commonsName, setCommonsName] = useState('');
   const [description, setDescription] = useState('');
   const [githubUsername, setGithubUsername] = useState('');
-  const [thematicDomain, setThematicDomain] = useState<ThematicDomain>('watershed-governance');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
   // Step 3
   const [allBioregions, setAllBioregions] = useState<BioregionInfo[]>([]);
-  const [bioregionSearch, setBioregionSearch] = useState('');
   const [selectedBioregion, setSelectedBioregion] = useState<BioregionInfo | null>(null);
   const [locating, setLocating] = useState(false);
+  const [geoTags, setGeoTags] = useState<GeoClassification | null>(null);
+  const [ecoLoading, setEcoLoading] = useState(false);
 
   // Step 4
   const [connectedNodes, setConnectedNodes] = useState<Set<string>>(new Set());
@@ -135,6 +183,55 @@ export default function OnboardingWizard() {
       .catch(console.error);
   }, []);
 
+  // ─── Auto-detect geo hierarchy from boundary points ─────────────
+  useEffect(() => {
+    if (boundary.length === 0 || allBioregions.length === 0) return;
+
+    const centroid: [number, number] = boundary.reduce(
+      (acc, [lng, lat]) =>
+        [acc[0] + lng / boundary.length, acc[1] + lat / boundary.length] as [number, number],
+      [0, 0] as [number, number],
+    );
+
+    // Find nearest bioregion
+    let nearest: BioregionInfo | null = null;
+    let minDist = Infinity;
+    for (const bio of allBioregions) {
+      const d = haversineDistance(centroid[1], centroid[0], bio.centroid[1], bio.centroid[0]);
+      if (d < minDist) {
+        minDist = d;
+        nearest = bio;
+      }
+    }
+    if (nearest) {
+      setSelectedBioregion(nearest);
+      setGeoTags((prev) => ({
+        realm: nearest!.realm,
+        realm_code: nearest!.code.substring(0, 2),
+        subrealm: nearest!.subrealm,
+        bioregion: nearest!.name,
+        bioregion_code: nearest!.code,
+        // Preserve ecoregion if already loaded
+        ecoregion: prev?.ecoregion,
+        ecoregion_id: prev?.ecoregion_id,
+        biome: prev?.biome,
+      }));
+    }
+
+    // Query RESOLVE API for ecoregion
+    setEcoLoading(true);
+    queryEcoregion(centroid[0], centroid[1]).then((eco) => {
+      setEcoLoading(false);
+      if (eco) {
+        setGeoTags((prev) =>
+          prev
+            ? { ...prev, ecoregion: eco.eco_name, ecoregion_id: eco.eco_id, biome: eco.biome_name }
+            : null,
+        );
+      }
+    });
+  }, [boundary, allBioregions]);
+
   // ─── Launch sequence ──────────────────────────────────────────────
   useEffect(() => {
     if (step !== 6) return;
@@ -151,62 +248,117 @@ export default function OnboardingWizard() {
         });
       }, delay),
     );
-    const completeTimer = setTimeout(() => setLaunchComplete(true), 4000);
+    const completeTimer = setTimeout(() => {
+      setLaunchComplete(true);
+      // Save the completed commons profile to localStorage
+      saveCommonsProfile();
+    }, 4000);
     return () => {
       timers.forEach(clearTimeout);
       clearTimeout(completeTimer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
+
+  // ─── Save profile to registry (localStorage for demo) ─────────
+  const saveCommonsProfile = useCallback(() => {
+    const profile = {
+      node_id: `user-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      display_name: commonsName,
+      description,
+      github_username: githubUsername,
+      topic_tags: tags,
+      territory_boundary: boundary,
+      geo_classification: geoTags,
+      bioregion_codes: geoTags ? [geoTags.bioregion_code] : [],
+      thematic_domain: tags[0] || 'other',
+      connected_nodes: Array.from(connectedNodes),
+      created_at: new Date().toISOString(),
+      status: 'pending',
+    };
+    try {
+      const existing = JSON.parse(localStorage.getItem('pending-commons') || '[]');
+      existing.push(profile);
+      localStorage.setItem('pending-commons', JSON.stringify(existing));
+    } catch {
+      // Storage unavailable
+    }
+  }, [commonsName, description, githubUsername, tags, boundary, geoTags, connectedNodes]);
 
   // ─── Navigation ───────────────────────────────────────────────────
   const goNext = useCallback(() => {
+    // Leaving step 3: stop drawing mode
+    if (step === 3) {
+      setIsDrawing(false);
+    }
     setDirection(1);
     setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  }, []);
+  }, [step, setIsDrawing]);
 
   const goBack = useCallback(() => {
+    if (step === 4) {
+      // Going back to step 3: re-enable drawing mode
+      setIsDrawing(true);
+    }
     setDirection(-1);
     setStep((s) => Math.max(s - 1, 1));
-  }, []);
+  }, [step, setIsDrawing]);
 
   const close = useCallback(() => {
     setShowOnboarding(false);
+    setIsDrawing(false);
     setTimeout(() => {
       setStep(1);
       setDirection(1);
       setCommonsName('');
       setDescription('');
       setGithubUsername('');
-      setThematicDomain('watershed-governance');
-      setBioregionSearch('');
+      setTags([]);
+      setTagInput('');
       setSelectedBioregion(null);
       setLocating(false);
+      setGeoTags(null);
+      setEcoLoading(false);
+      clearBoundary();
       setConnectedNodes(new Set());
       setLaunchSteps(new Array(5).fill(false));
       setLaunchComplete(false);
     }, 400);
-  }, [setShowOnboarding]);
+  }, [setShowOnboarding, setIsDrawing, clearBoundary]);
 
-  // ─── Bioregion helpers ────────────────────────────────────────────
-  const filteredBioregions = useMemo(() => {
-    if (!bioregionSearch.trim()) return allBioregions;
-    const q = bioregionSearch.toLowerCase();
-    return allBioregions.filter(
-      (b) =>
-        b.name.toLowerCase().includes(q) ||
-        b.code.toLowerCase().includes(q) ||
-        b.realm.toLowerCase().includes(q),
-    );
-  }, [allBioregions, bioregionSearch]);
+  // ─── Tag helpers ────────────────────────────────────────────────────
+  const addTag = useCallback((tag: string) => {
+    const normalized = tag.trim().toLowerCase().replace(/\s+/g, '-');
+    if (!normalized) return;
+    setTags((prev) => (prev.includes(normalized) ? prev : [...prev, normalized]));
+    setTagInput('');
+  }, []);
 
-  const handleSelectBioregion = useCallback(
-    (bio: BioregionInfo) => {
-      setSelectedBioregion(bio);
-      // centroid is [lng, lat]
-      flyTo(bio.centroid[1], bio.centroid[0], 2.8);
+  const removeTag = useCallback((tag: string) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
+  }, []);
+
+  const handleTagKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addTag(tagInput);
+      } else if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
+        setTags((prev) => prev.slice(0, -1));
+      }
     },
-    [flyTo],
+    [tagInput, tags, addTag],
   );
+
+  const filteredSuggestions = useMemo(() => {
+    const q = tagInput.toLowerCase();
+    return TAG_SUGGESTIONS.filter((s) => !tags.includes(s) && (!q || s.includes(q))).slice(0, 12);
+  }, [tags, tagInput]);
+
+  // ─── Step 3: Enter drawing mode + Use My Location ──────────────────
+  const handleStartDrawing = useCallback(() => {
+    setIsDrawing(true);
+  }, [setIsDrawing]);
 
   const handleUseMyLocation = useCallback(() => {
     if (!navigator.geolocation) return;
@@ -214,22 +366,15 @@ export default function OnboardingWizard() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-        let closest: BioregionInfo | null = null;
-        let minDist = Infinity;
-        for (const bio of allBioregions) {
-          const d = haversineDistance(latitude, longitude, bio.centroid[1], bio.centroid[0]);
-          if (d < minDist) {
-            minDist = d;
-            closest = bio;
-          }
-        }
-        if (closest) handleSelectBioregion(closest);
+        flyTo(latitude, longitude, 2.0);
         setLocating(false);
+        // Enable drawing mode
+        setIsDrawing(true);
       },
       () => setLocating(false),
-      { enableHighAccuracy: false, timeout: 8000 },
+      { enableHighAccuracy: true, timeout: 10000 },
     );
-  }, [allBioregions, handleSelectBioregion]);
+  }, [flyTo, setIsDrawing]);
 
   // ─── Step 4: matching nodes ───────────────────────────────────────
   const matchingNodes = useMemo(() => {
@@ -238,10 +383,12 @@ export default function OnboardingWizard() {
       const nodeCode = node.bioregion_codes[0];
       const nodeBio = seedBioregionLookup[nodeCode];
       const realmMatch = nodeBio?.realm === selectedBioregion.realm;
-      const domainMatch = node.thematic_domain === thematicDomain;
-      return realmMatch || domainMatch;
+      const tagMatch = tags.some(
+        (t) => node.thematic_domain === t || node.topic_tags.includes(t),
+      );
+      return realmMatch || tagMatch;
     });
-  }, [selectedBioregion, thematicDomain]);
+  }, [selectedBioregion, tags]);
 
   const toggleConnection = useCallback((nodeId: string) => {
     setConnectedNodes((prev) => {
@@ -261,7 +408,6 @@ export default function OnboardingWizard() {
 
   const renderStep1 = () => (
     <div className="flex flex-col items-center text-center px-2">
-      {/* Illustration */}
       <div className="relative mb-8 mt-2">
         <div className="w-28 h-28 rounded-full bg-gradient-to-br from-cyan-500/20 via-teal-400/10 to-blue-500/20 flex items-center justify-center border border-cyan-500/20">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500/30 to-teal-400/20 flex items-center justify-center">
@@ -280,10 +426,8 @@ export default function OnboardingWizard() {
             </svg>
           </div>
         </div>
-        {/* Animated ring */}
         <div className="absolute inset-0 rounded-full border border-cyan-400/20 animate-ping" style={{ animationDuration: '3s' }} />
       </div>
-
       <h2 className="text-2xl font-bold text-white mb-3">Start Your Knowledge Commons</h2>
       <p className="text-sm text-gray-400 leading-relaxed max-w-sm mb-8">
         In a few steps, we&apos;ll help you set up a community knowledge garden rooted in your bioregion.
@@ -297,6 +441,7 @@ export default function OnboardingWizard() {
     </div>
   );
 
+  // ─── Step 2: Name + Tags ──────────────────────────────────────────
   const renderStep2 = () => (
     <div className="flex flex-col gap-5 px-1">
       <div>
@@ -338,151 +483,240 @@ export default function OnboardingWizard() {
         />
       </div>
 
+      {/* Tag Input */}
       <div>
-        <label className="block text-xs font-medium text-gray-400 mb-1.5">Thematic Domain</label>
-        <div className="relative">
-          <select
-            className={`${inputClass} appearance-none pr-10 cursor-pointer`}
-            value={thematicDomain}
-            onChange={(e) => setThematicDomain(e.target.value as ThematicDomain)}
-          >
-            {THEMATIC_DOMAINS.map((d) => (
-              <option key={d} value={d}>
-                {DOMAIN_LABELS[d]}
-              </option>
-            ))}
-          </select>
-          <svg
-            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between pt-2">
-        <button className={secondaryBtnClass} onClick={goBack}>
-          ← Back
-        </button>
-        <button className={primaryBtnClass} onClick={goNext} disabled={!commonsName.trim()}>
-          Continue →
-        </button>
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="flex flex-col gap-4 px-1">
-      <div>
-        <h2 className="text-xl font-bold text-white mb-1">Where in the World?</h2>
-        <p className="text-sm text-gray-400">Select the bioregion your commons will call home.</p>
-      </div>
-
-      {/* Selected bioregion badge */}
-      {selectedBioregion && (
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium border border-cyan-500/40 bg-cyan-500/10 text-cyan-300"
-          >
-            <span
-              className="w-2 h-2 rounded-full shrink-0"
-              style={{ backgroundColor: REALM_COLORS[selectedBioregion.realm] }}
-            />
-            {selectedBioregion.name}
-            <span className="text-cyan-500/60">{selectedBioregion.code}</span>
-          </span>
-          <button
-            onClick={() => setSelectedBioregion(null)}
-            className="text-gray-500 hover:text-gray-300 transition-colors text-xs"
-            aria-label="Clear selection"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      {/* Search + Use Location */}
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            className={`${inputClass} pl-10`}
-            placeholder="Search bioregions..."
-            value={bioregionSearch}
-            onChange={(e) => setBioregionSearch(e.target.value)}
-          />
-        </div>
-        <button
-          className={`${secondaryBtnClass} text-xs shrink-0 ${locating ? 'animate-pulse' : ''}`}
-          onClick={handleUseMyLocation}
-          disabled={locating || allBioregions.length === 0}
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {locating ? 'Finding...' : 'My Location'}
-        </button>
-      </div>
-
-      {/* Bioregion list */}
-      <div className="overflow-y-auto max-h-[32vh] rounded-xl border border-gray-700/30 bg-gray-800/30 divide-y divide-gray-700/20 scrollbar-thin">
-        {filteredBioregions.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-gray-500">
-            {allBioregions.length === 0 ? 'Loading bioregions...' : 'No bioregions match your search.'}
-          </div>
-        ) : (
-          filteredBioregions.map((bio) => {
-            const isSelected = selectedBioregion?.code === bio.code;
-            return (
-              <button
-                key={bio.code}
-                className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors hover:bg-gray-700/30 cursor-pointer ${
-                  isSelected ? 'bg-cyan-500/10 border-l-2 border-l-cyan-400' : 'border-l-2 border-l-transparent'
-                }`}
-                onClick={() => handleSelectBioregion(bio)}
+        <label className="block text-xs font-medium text-gray-400 mb-1.5">Topic Tags</label>
+        <div className="bg-gray-800/60 border border-gray-700/40 rounded-xl px-3 py-2.5 focus-within:ring-1 focus-within:ring-cyan-500/50 transition-colors">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
               >
-                <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: REALM_COLORS[bio.realm] }}
-                />
-                <span className="flex-1 min-w-0">
-                  <span className={`block text-sm truncate ${isSelected ? 'text-cyan-300 font-medium' : 'text-gray-300'}`}>
-                    {bio.name}
-                  </span>
-                  <span className="block text-[10px] text-gray-500">{bio.realm}</span>
-                </span>
-                <span className="text-[10px] font-mono text-gray-500 shrink-0">{bio.code}</span>
-              </button>
-            );
-          })
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeTag(tag)}
+                  className="ml-0.5 text-cyan-400/60 hover:text-cyan-300 transition-colors cursor-pointer"
+                  aria-label={`Remove ${tag}`}
+                >
+                  ✕
+                </button>
+              </span>
+            ))}
+            <input
+              type="text"
+              className="flex-1 min-w-[120px] bg-transparent text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none py-0.5"
+              placeholder={tags.length === 0 ? 'Type a tag and press Enter...' : 'Add more...'}
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={handleTagKeyDown}
+            />
+          </div>
+        </div>
+        {filteredSuggestions.length > 0 && (
+          <div className="mt-2.5">
+            <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Suggestions</span>
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {filteredSuggestions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => addTag(s)}
+                  className="rounded-full px-2.5 py-1 text-[11px] text-gray-400 border border-gray-700/40 bg-gray-800/40 hover:bg-gray-700/50 hover:text-gray-200 transition-colors cursor-pointer"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
       </div>
 
+      <div className="flex items-center justify-between pt-2">
+        <button className={secondaryBtnClass} onClick={goBack}>← Back</button>
+        <button className={primaryBtnClass} onClick={goNext} disabled={!commonsName.trim()}>Continue →</button>
+      </div>
+    </div>
+  );
+
+  // ─── Step 3: Territory Drawing on Globe ────────────────────────────
+  const renderStep3 = () => (
+    <div className="flex flex-col gap-4 px-1">
+      <div>
+        <h2 className="text-xl font-bold text-white mb-1">Define Your Commons Territory</h2>
+        <p className="text-sm text-gray-400 leading-relaxed">
+          Draw a boundary on the globe to define your commons membrane. This could be a neighborhood, watershed, valley, or any meaningful territory.
+        </p>
+      </div>
+
+      {/* Instructions / Drawing status */}
+      {!isDrawing && boundary.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-cyan-500/30 bg-cyan-500/5 p-5 text-center">
+          <div className="text-2xl mb-3">🌍</div>
+          <p className="text-sm text-gray-300 mb-4">
+            First, navigate to your area on the globe behind this panel, then start placing boundary points.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <button
+              className={`${primaryBtnClass} text-xs py-2.5 px-4`}
+              onClick={handleUseMyLocation}
+              disabled={locating}
+            >
+              📍 {locating ? 'Finding...' : 'Use My Location'}
+            </button>
+            <button
+              className={`${secondaryBtnClass} text-xs py-2.5 px-4`}
+              onClick={handleStartDrawing}
+            >
+              ✏️ Start Drawing
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Active drawing indicator */}
+          {isDrawing && (
+            <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/5 px-4 py-2.5 flex items-center gap-3">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+              </span>
+              <span className="text-xs text-cyan-300 font-medium">Drawing mode active — click on the globe to place points</span>
+            </div>
+          )}
+
+          {/* Point count + area */}
+          <div className="text-xs text-gray-500 flex items-center gap-3">
+            <span>
+              Points: <span className="text-gray-300 font-medium">{boundary.length}</span> placed
+            </span>
+            {boundary.length >= 3 && (
+              <>
+                <span className="text-gray-600">•</span>
+                <span>
+                  Area: <span className="text-gray-300 font-medium">~{Math.round(approxPolygonAreaKm2(boundary)).toLocaleString()} km²</span>
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {!isDrawing && (
+              <button
+                type="button"
+                className={`${secondaryBtnClass} text-xs py-2 px-3`}
+                onClick={handleStartDrawing}
+              >
+                ✏️ Resume Drawing
+              </button>
+            )}
+            {isDrawing && (
+              <button
+                type="button"
+                className={`${secondaryBtnClass} text-xs py-2 px-3 border-cyan-500/30 text-cyan-300`}
+                onClick={() => setIsDrawing(false)}
+              >
+                ✓ Done Drawing
+              </button>
+            )}
+            <button
+              type="button"
+              className={`${secondaryBtnClass} text-xs py-2 px-3`}
+              onClick={() => undoBoundaryPoint()}
+              disabled={boundary.length === 0}
+            >
+              Undo Last
+            </button>
+            <button
+              type="button"
+              className={`${secondaryBtnClass} text-xs py-2 px-3`}
+              onClick={() => {
+                clearBoundary();
+                setGeoTags(null);
+                setSelectedBioregion(null);
+              }}
+              disabled={boundary.length === 0}
+            >
+              ↺ Clear All
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Geographic Classification — holonic hierarchy */}
+      {geoTags && (
+        <div className="rounded-xl border border-gray-700/30 bg-gray-800/30 p-4 space-y-0 divide-y divide-gray-700/20">
+          <div className="text-[10px] uppercase tracking-wider text-gray-500 font-medium pb-2.5">
+            Geographic Classification
+          </div>
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="text-base w-6 text-center">🌍</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 block">Realm</span>
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: REALM_COLORS[geoTags.realm as Realm] || '#666' }}
+                />
+                <span className="text-sm text-gray-200">{geoTags.realm}</span>
+                <span className="text-[10px] font-mono text-gray-500">{geoTags.realm_code}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="text-base w-6 text-center">🗺️</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 block">Subrealm</span>
+              <span className="text-sm text-gray-200">{geoTags.subrealm}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="text-base w-6 text-center">🌿</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 block">Bioregion</span>
+              <span className="text-sm text-gray-200">{geoTags.bioregion}</span>
+              <span className="text-xs font-mono text-gray-500 ml-2">{geoTags.bioregion_code}</span>
+            </div>
+          </div>
+          {/* Ecoregion — from RESOLVE API */}
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="text-base w-6 text-center">🦎</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 block">Ecoregion</span>
+              {ecoLoading ? (
+                <span className="text-xs text-gray-500 italic">Resolving ecoregion...</span>
+              ) : geoTags.ecoregion ? (
+                <span className="text-sm text-gray-200">{geoTags.ecoregion}</span>
+              ) : (
+                <span className="text-xs text-gray-500 italic">Place points to detect</span>
+              )}
+            </div>
+          </div>
+          {/* Biome */}
+          {geoTags.biome && (
+            <div className="flex items-center gap-3 py-2.5">
+              <span className="text-base w-6 text-center">🌳</span>
+              <div className="flex-1 min-w-0">
+                <span className="text-[10px] text-gray-500 block">Biome</span>
+                <span className="text-sm text-gray-200">{geoTags.biome}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex items-center justify-between pt-1">
-        <button className={secondaryBtnClass} onClick={goBack}>
-          ← Back
-        </button>
-        <button className={primaryBtnClass} onClick={goNext} disabled={!selectedBioregion}>
+        <button className={secondaryBtnClass} onClick={goBack}>← Back</button>
+        <button className={primaryBtnClass} onClick={goNext} disabled={boundary.length < 3}>
           Continue →
         </button>
       </div>
     </div>
   );
 
+  // ─── Step 4: Connect with Related Commons ─────────────────────────
   const renderStep4 = () => (
     <div className="flex flex-col gap-4 px-1">
       <div>
@@ -528,9 +762,7 @@ export default function OnboardingWizard() {
                         {DOMAIN_LABELS[node.thematic_domain]}
                       </span>
                       {nodeBio && (
-                        <span className="text-[10px] text-gray-500">
-                          {nodeBio.name}
-                        </span>
+                        <span className="text-[10px] text-gray-500">{nodeBio.name}</span>
                       )}
                     </div>
                   </div>
@@ -552,16 +784,13 @@ export default function OnboardingWizard() {
       )}
 
       <div className="flex items-center justify-between pt-1">
-        <button className={secondaryBtnClass} onClick={goBack}>
-          ← Back
-        </button>
-        <button className={primaryBtnClass} onClick={goNext}>
-          Continue →
-        </button>
+        <button className={secondaryBtnClass} onClick={goBack}>← Back</button>
+        <button className={primaryBtnClass} onClick={goNext}>Continue →</button>
       </div>
     </div>
   );
 
+  // ─── Step 5: Review ───────────────────────────────────────────────
   const renderStep5 = () => (
     <div className="flex flex-col gap-5 px-1">
       <div>
@@ -576,7 +805,6 @@ export default function OnboardingWizard() {
           <p className="text-base font-semibold text-white">{commonsName}</p>
         </div>
 
-        {/* Description */}
         {description && (
           <div>
             <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Description</span>
@@ -584,36 +812,66 @@ export default function OnboardingWizard() {
           </div>
         )}
 
-        {/* Domain */}
+        {/* Topic Tags */}
         <div>
-          <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Thematic Domain</span>
-          <span
-            className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
-            style={{
-              backgroundColor: `${DOMAIN_COLORS[thematicDomain]}20`,
-              color: DOMAIN_COLORS[thematicDomain],
-            }}
-          >
-            {DOMAIN_LABELS[thematicDomain]}
-          </span>
+          <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1.5">Topic Tags</span>
+          {tags.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <span className="text-sm text-gray-500 italic">No tags selected</span>
+          )}
         </div>
 
-        {/* Bioregion */}
-        {selectedBioregion && (
-          <div>
-            <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Bioregion</span>
-            <div className="flex items-center gap-2">
-              <span
-                className="w-2.5 h-2.5 rounded-full shrink-0"
-                style={{ backgroundColor: REALM_COLORS[selectedBioregion.realm] }}
-              />
-              <span className="text-sm text-gray-200">{selectedBioregion.name}</span>
-              <span className="text-xs font-mono text-gray-500">{selectedBioregion.code}</span>
+        {/* Territory + Full Geo Hierarchy */}
+        <div>
+          <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1.5">Territory</span>
+          <p className="text-sm text-gray-300 mb-2">
+            {boundary.length} boundary point{boundary.length !== 1 ? 's' : ''} defined
+            {boundary.length >= 3 && (
+              <span className="text-gray-500 ml-1">
+                (~{Math.round(approxPolygonAreaKm2(boundary)).toLocaleString()} km²)
+              </span>
+            )}
+          </p>
+          {geoTags && (
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center gap-2 text-gray-400">
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: REALM_COLORS[geoTags.realm as Realm] || '#666' }}
+                />
+                <span className="text-gray-300">{geoTags.realm}</span>
+                <span className="text-gray-600">→</span>
+                <span className="text-gray-300">{geoTags.subrealm}</span>
+                <span className="text-gray-600">→</span>
+                <span className="text-gray-300">{geoTags.bioregion}</span>
+                <span className="font-mono text-gray-500">{geoTags.bioregion_code}</span>
+              </div>
+              {geoTags.ecoregion && (
+                <div className="flex items-center gap-2 text-gray-400 pl-4">
+                  <span className="text-gray-600">└</span>
+                  <span className="text-gray-300">{geoTags.ecoregion}</span>
+                  {geoTags.biome && (
+                    <>
+                      <span className="text-gray-600">·</span>
+                      <span className="text-gray-400">{geoTags.biome}</span>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* GitHub */}
         {githubUsername && (
           <div>
             <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">GitHub</span>
@@ -623,7 +881,6 @@ export default function OnboardingWizard() {
           </div>
         )}
 
-        {/* Connections */}
         <div>
           <span className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Proposed Connections</span>
           <p className="text-sm text-gray-300">
@@ -635,16 +892,13 @@ export default function OnboardingWizard() {
       </div>
 
       <div className="flex items-center justify-between pt-1">
-        <button className={secondaryBtnClass} onClick={goBack}>
-          ← Back to Edit
-        </button>
-        <button className={primaryBtnClass} onClick={goNext}>
-          Launch My Commons →
-        </button>
+        <button className={secondaryBtnClass} onClick={goBack}>← Back to Edit</button>
+        <button className={primaryBtnClass} onClick={goNext}>Launch My Commons →</button>
       </div>
     </div>
   );
 
+  // ─── Step 6: Launch ───────────────────────────────────────────────
   const renderStep6 = () => (
     <div className="flex flex-col items-center text-center px-2">
       <h2 className="text-xl font-bold text-white mb-6">
@@ -683,7 +937,6 @@ export default function OnboardingWizard() {
               <span className={`text-sm ${done ? 'text-gray-200' : 'text-gray-600'} transition-colors`}>
                 {msg}
               </span>
-              {/* Glow on last item */}
               {isLast && done && (
                 <motion.span
                   initial={{ opacity: 0 }}
@@ -716,17 +969,14 @@ export default function OnboardingWizard() {
                 when everything is ready.
               </p>
               <p className="text-xs text-gray-500">
-                In the meantime, explore the existing commons on the globe.
+                Your commons profile has been saved to the local registry.
               </p>
             </div>
-            <button className={primaryBtnClass} onClick={close}>
-              Close
-            </button>
+            <button className={primaryBtnClass} onClick={close}>Close</button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Ambient glow */}
       {!launchComplete && (
         <motion.div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-32 rounded-full pointer-events-none"
@@ -746,6 +996,10 @@ export default function OnboardingWizard() {
   // Main render
   // ═══════════════════════════════════════════════════════════════════
 
+  // When drawing on the globe, minimize the wizard to a compact panel
+  // so the user can see and interact with the globe
+  const isMinimizedForDrawing = isDrawing && step === 3;
+
   return (
     <AnimatePresence>
       {showOnboarding && (
@@ -755,25 +1009,35 @@ export default function OnboardingWizard() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={close}
+          className={`fixed inset-0 z-[90] flex ${
+            isMinimizedForDrawing
+              ? 'items-end justify-start p-4 pointer-events-none'
+              : 'items-center justify-center bg-black/60 backdrop-blur-sm'
+          }`}
+          onClick={isMinimizedForDrawing ? undefined : close}
           role="dialog"
           aria-label="Start a Commons wizard"
           aria-modal="true"
         >
           <motion.div
+            layout
             initial={{ opacity: 0, scale: 0.95, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-gray-700/40 shadow-2xl shadow-black/50 w-[520px] max-w-[92vw] max-h-[85vh] overflow-hidden flex flex-col"
+            className={`relative bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-gray-700/40 shadow-2xl shadow-black/50 overflow-hidden flex flex-col pointer-events-auto ${
+              isMinimizedForDrawing
+                ? 'w-[360px] max-w-[90vw] max-h-[50vh]'
+                : 'w-[520px] max-w-[92vw] max-h-[85vh]'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* ─── Progress bar ──────────────────────────────────── */}
+            {/* Progress bar */}
             <div className="px-6 pt-5 pb-4 border-b border-gray-700/20 shrink-0">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">
                   Step {step} of {TOTAL_STEPS}
+                  {isMinimizedForDrawing && <span className="ml-2 text-cyan-400">· Drawing</span>}
                 </span>
                 {step < 6 && (
                   <button
@@ -800,7 +1064,7 @@ export default function OnboardingWizard() {
               </div>
             </div>
 
-            {/* ─── Step content ──────────────────────────────────── */}
+            {/* Step content */}
             <div className="flex-1 overflow-y-auto px-6 py-5 relative">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div

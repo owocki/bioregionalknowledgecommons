@@ -8,7 +8,7 @@ OpenCivics Labs · Version 1.1 · February 2026
 
 ## Development Progress Tracker
 
-> **Last Updated:** 2026-02-11
+> **Last Updated:** 2026-02-10
 > **Current Phase:** Phase 1 (Globe & Registry) — COMPLETION SPRINT
 > **Previous:** Phase 0 (Foundation) + Phase 1 core — completed 2026-02-10
 
@@ -109,6 +109,18 @@ OpenCivics Labs · Version 1.1 · February 2026
 | — | Constants module (`src/lib/constants.ts`) | ✅ DONE | 2026-02-11 |
 | — | Keyboard shortcuts overlay (`?` key) | ✅ DONE | 2026-02-11 |
 | — | `useKeyboardNav` hook (global Escape handling) | ✅ DONE | 2026-02-11 |
+
+### Sprint 4 Completed (2026-02-10) — Ecoregions, Legend, Camera Lock
+
+| Task ID | Description | Status | Date |
+|---------|-------------|--------|------|
+| — | Ecoregion layer on globe (RESOLVE API, WGS84, simplified geometries) | ✅ DONE | 2026-02-10 |
+| — | Ecoregion toggle in layers modal (ControlPanel) | ✅ DONE | 2026-02-10 |
+| — | BioregionPanel: ecoregion list + drill-down, dynamic API fetch, holonic display | ✅ DONE | 2026-02-10 |
+| — | Deterministic ecoregion colors: `getEcoColor(ecoId)` — panel legend matches globe | ✅ DONE | 2026-02-10 |
+| — | Click ecoregion on globe → open ecoregion detail in panel | ✅ DONE | 2026-02-10 |
+| — | Camera: no auto-rotate when bioregion or ecoregion selected; zoom in (minDistance 1.2) | ✅ DONE | 2026-02-10 |
+| — | EcoregionLayer: GPU geometry dispose on change; API simplification + client simplifyRing | ✅ DONE | 2026-02-10 |
 
 ### Remaining (Deferred)
 

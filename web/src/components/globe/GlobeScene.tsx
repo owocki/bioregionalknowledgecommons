@@ -4,19 +4,29 @@ import { Suspense, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { useGlobeStore } from '@/stores/globeStore';
 import GlobeCore from './GlobeCore';
 import PoliticalBoundaries from './PoliticalBoundaries';
 import CityLabels from './CityLabels';
 import BioregionLayer from './BioregionLayer';
+import EcoregionLayer from './EcoregionLayer';
 import NodeMarkers from './NodeMarkers';
 import FlowArcs from './FlowArcs';
 import BridgeConnections from './BridgeConnections';
+import TerritoryDrawer from './TerritoryDrawer';
 import CameraAnimator from './CameraAnimator';
 
 export default function GlobeScene() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
+  const showPlaceNames = useGlobeStore((s) => s.showPlaceNames);
+  const showSatelliteImagery = useGlobeStore((s) => s.showSatelliteImagery);
+  const selectedBioregion = useGlobeStore((s) => s.selectedBioregion);
+  const selectedEcoregion = useGlobeStore((s) => s.selectedEcoregion);
 
-  // Pause auto-rotation on interaction, resume after timeout
+  // When a bioregion or ecoregion is selected, lock the camera (no auto-rotate).
+  const isFocused = !!(selectedBioregion || selectedEcoregion !== null);
+
+  // Pause auto-rotation on interaction, resume after timeout (only when not focused)
   const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleInteractionStart = useCallback(() => {
@@ -29,12 +39,14 @@ export default function GlobeScene() {
   }, []);
 
   const handleInteractionEnd = useCallback(() => {
+    // Don't resume auto-rotate when focused on a bioregion/ecoregion
+    if (isFocused) return;
     resumeTimer.current = setTimeout(() => {
       if (controlsRef.current) {
         controlsRef.current.autoRotate = true;
       }
     }, 3000);
-  }, []);
+  }, [isFocused]);
 
   return (
     <div style={{ width: '100%', height: '100%', background: '#0a0a0a' }}>
@@ -66,16 +78,19 @@ export default function GlobeScene() {
 
         <Suspense fallback={null}>
           {/* Globe sphere + atmosphere */}
-          <GlobeCore />
+          <GlobeCore showSatellite={showSatelliteImagery} />
 
-          {/* Political boundaries (countries + states) */}
-          <PoliticalBoundaries />
+          {/* Political boundaries (countries + states) — tied to place names toggle */}
+          {showPlaceNames && <PoliticalBoundaries />}
 
           {/* City labels */}
-          <CityLabels />
+          {showPlaceNames && <CityLabels />}
 
           {/* Bioregion translucent patches */}
           <BioregionLayer />
+
+          {/* Ecoregion sub-regions (shown when bioregion selected + toggle on) */}
+          <EcoregionLayer />
 
           {/* Node markers with hover labels */}
           <NodeMarkers />
@@ -86,20 +101,23 @@ export default function GlobeScene() {
           {/* Dashed bridge connections */}
           <BridgeConnections />
 
+          {/* Territory boundary drawing (onboarding) */}
+          <TerritoryDrawer />
+
           {/* Camera animation controller */}
           <CameraAnimator />
         </Suspense>
 
-        {/* Orbit controls with auto-rotation */}
+        {/* Orbit controls — auto-rotation disabled when focused on a bioregion/ecoregion */}
         <OrbitControls
           ref={controlsRef}
           enablePan={false}
           enableDamping
           dampingFactor={0.08}
           rotateSpeed={0.5}
-          minDistance={1.5}
+          minDistance={1.2}
           maxDistance={5}
-          autoRotate
+          autoRotate={!isFocused}
           autoRotateSpeed={0.3}
           onStart={handleInteractionStart}
           onEnd={handleInteractionEnd}
