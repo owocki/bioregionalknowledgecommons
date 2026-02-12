@@ -39,6 +39,7 @@ interface ProcessedEcoregion {
   color: THREE.Color;
   fillGeometries: THREE.BufferGeometry[];
   boundaryGeometries: THREE.BufferGeometry[];
+  centroid: [number, number]; // [lng, lat] for click-to-zoom
 }
 
 // ─── Geometry helpers ────────────────────────────────────────────────
@@ -56,7 +57,8 @@ function simplifyRing(ring: number[][], maxPts: number): number[][] {
 }
 
 function createBoundaryGeometry(ring: number[][]): THREE.BufferGeometry {
-  const pts = ring.map(([lng, lat]) => latLngToVector3(lat, lng, 1.004));
+  // Radius above high-res tiles (1.005+) so ecoregions are visible and clickable
+  const pts = ring.map(([lng, lat]) => latLngToVector3(lat, lng, 1.012));
   return new THREE.BufferGeometry().setFromPoints(pts);
 }
 
@@ -78,8 +80,9 @@ function createFilledGeometry(rings: number[][][]): THREE.BufferGeometry | null 
 
   const totalPts = flatCoords.length / 2;
   const positions = new Float32Array(totalPts * 3);
+  // Radius above high-res tiles (1.005+) so ecoregions are visible and clickable
   for (let i = 0; i < totalPts; i++) {
-    const pos = latLngToVector3(flatCoords[i * 2 + 1], flatCoords[i * 2], 1.003);
+    const pos = latLngToVector3(flatCoords[i * 2 + 1], flatCoords[i * 2], 1.011);
     positions[i * 3] = pos.x;
     positions[i * 3 + 1] = pos.y;
     positions[i * 3 + 2] = pos.z;
@@ -149,6 +152,11 @@ async function fetchEcoregionGeometries(
       const fillGeometries: THREE.BufferGeometry[] = [];
       const boundaryGeometries: THREE.BufferGeometry[] = [];
 
+      // Calculate centroid from all ring coordinates
+      let totalLng = 0;
+      let totalLat = 0;
+      let pointCount = 0;
+
       // ArcGIS returns multiple rings: first is outer, rest can be holes
       // or disjoint polygon parts. We treat each ring independently:
       // big rings get their own fill + boundary, tiny rings are skipped.
@@ -157,13 +165,25 @@ async function fetchEcoregionGeometries(
         const simplified = simplifyRing(ring, 300);
         if (simplified.length < 4) continue;
 
+        // Accumulate for centroid calculation
+        for (const [lng, lat] of simplified) {
+          totalLng += lng;
+          totalLat += lat;
+          pointCount++;
+        }
+
         const fill = createFilledGeometry([simplified]);
         if (fill) fillGeometries.push(fill);
         boundaryGeometries.push(createBoundaryGeometry(simplified));
       }
 
       if (fillGeometries.length === 0 && boundaryGeometries.length === 0) continue;
-      results.push({ ecoId, ecoName, color, fillGeometries, boundaryGeometries });
+
+      const centroid: [number, number] = pointCount > 0
+        ? [totalLng / pointCount, totalLat / pointCount]
+        : [lng, lat]; // fallback to query center
+
+      results.push({ ecoId, ecoName, color, fillGeometries, boundaryGeometries, centroid });
     }
 
     return results;
@@ -179,6 +199,7 @@ export default function EcoregionLayer() {
   const selectedBioregion = useGlobeStore((s) => s.selectedBioregion);
   const selectedEcoregion = useGlobeStore((s) => s.selectedEcoregion);
   const setSelectedEcoregion = useGlobeStore((s) => s.setSelectedEcoregion);
+  const flyTo = useGlobeStore((s) => s.flyTo);
 
   const [lookup, setLookup] = useState<BioregionLookup>({});
   const [ecoregions, setEcoregions] = useState<ProcessedEcoregion[]>([]);
@@ -231,6 +252,13 @@ export default function EcoregionLayer() {
 
   if (!showEcoregions || !selectedBioregion || ecoregions.length === 0) return null;
 
+  // Handle ecoregion click - select and zoom
+  const handleEcoregionClick = (eco: ProcessedEcoregion) => {
+    setSelectedEcoregion(eco.ecoId);
+    // Zoom to ecoregion centroid at a tighter zoom level (1.4 = quite close)
+    flyTo(eco.centroid[1], eco.centroid[0], 1.4);
+  };
+
   return (
     <group>
       {ecoregions.map((eco) => (
@@ -238,7 +266,7 @@ export default function EcoregionLayer() {
           key={eco.ecoId}
           eco={eco}
           isSelected={selectedEcoregion === eco.ecoId}
-          onSelect={setSelectedEcoregion}
+          onClick={() => handleEcoregionClick(eco)}
         />
       ))}
     </group>
@@ -250,10 +278,10 @@ export default function EcoregionLayer() {
 interface EcoregionMeshProps {
   eco: ProcessedEcoregion;
   isSelected: boolean;
-  onSelect: (ecoId: number | null) => void;
+  onClick: () => void;
 }
 
-function EcoregionMesh({ eco, isSelected, onSelect }: EcoregionMeshProps) {
+function EcoregionMesh({ eco, isSelected, onClick }: EcoregionMeshProps) {
   const fillGroupRef = useRef<THREE.Group>(null);
   const lineGroupRef = useRef<THREE.Group>(null);
 
@@ -286,7 +314,7 @@ function EcoregionMesh({ eco, isSelected, onSelect }: EcoregionMeshProps) {
           <mesh
             key={`f-${i}`}
             geometry={geom}
-            onClick={(e) => { e.stopPropagation(); onSelect(eco.ecoId); }}
+            onClick={(e) => { e.stopPropagation(); onClick(); }}
             onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
             onPointerOut={() => { document.body.style.cursor = 'default'; }}
           >

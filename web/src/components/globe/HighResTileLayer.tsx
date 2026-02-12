@@ -6,29 +6,25 @@ import * as THREE from 'three';
 import { useGlobeStore } from '@/stores/globeStore';
 
 // ─── Tile Configuration ────────────────────────────────────────────────
-// Uses standard Web Mercator (EPSG:3857) tiles
-
 const TILE_CONFIG = {
-  // Zoom threshold: show tiles when camera is closer than this distance
-  enableThreshold: 1.3,
-  // Fade-in range (smooth transition)
-  fadeStart: 1.3,
-  fadeEnd: 1.15,
+  // Show tiles when camera is closer than this distance
+  enableThreshold: 2.2,
+  // Fade-in range
+  fadeStart: 2.2,
+  fadeEnd: 1.8,
   // Zoom level mapping
   maxZoom: 10,
-  minZoom: 4,
+  minZoom: 2,
 };
 
-// Tile URL - using ESRI World Imagery (free, high quality satellite)
+// Tile URL - ESRI World Imagery
 function getTileUrl(z: number, x: number, y: number): string {
-  // ESRI World Imagery - free for non-commercial use, high quality
   return `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`;
 }
 
 // Convert lat/lng to Web Mercator tile coordinates
 function latLngToTile(lat: number, lng: number, zoom: number): { x: number; y: number } {
   const n = Math.pow(2, zoom);
-  // Clamp latitude to valid Mercator range
   const latClamped = Math.max(-85.051129, Math.min(85.051129, lat));
   const x = Math.floor(((lng + 180) / 360) * n);
   const latRad = (latClamped * Math.PI) / 180;
@@ -39,49 +35,47 @@ function latLngToTile(lat: number, lng: number, zoom: number): { x: number; y: n
   };
 }
 
-// Convert camera distance to zoom level (smooth interpolation)
+// Convert camera distance to zoom level
 function distanceToZoom(distance: number): number {
-  // Map distance to zoom: closer = higher zoom
-  // distance 1.3 -> zoom 4, distance 1.01 -> zoom 10
-  if (distance >= 1.3) return 4;
+  if (distance >= 2.2) return 2;
   if (distance <= 1.02) return 10;
-  const t = (1.3 - distance) / (1.3 - 1.02);
-  return Math.round(4 + t * 6);
+  const t = (2.2 - distance) / (2.2 - 1.02);
+  return Math.round(2 + t * 8);
 }
 
-// Convert Web Mercator tile coordinates to lat/lng bounds
+// Convert tile coordinates to lat/lng bounds
 function tileBounds(x: number, y: number, zoom: number): {
-  north: number;
-  south: number;
-  west: number;
-  east: number;
+  north: number; south: number; west: number; east: number;
 } {
   const n = Math.pow(2, zoom);
   const west = (x / n) * 360 - 180;
   const east = ((x + 1) / n) * 360 - 180;
-  // Web Mercator Y to latitude
   const north = (Math.atan(Math.sinh(Math.PI * (1 - (2 * y) / n))) * 180) / Math.PI;
   const south = (Math.atan(Math.sinh(Math.PI * (1 - (2 * (y + 1)) / n))) * 180) / Math.PI;
   return { north, south, west, east };
 }
 
-// Convert lat/lng to 3D position on sphere (matching GlobeCore coordinate system)
+// Convert lat/lng to 3D position on sphere
+// Uses standard geographic formula matching Three.js SphereGeometry
 function latLngToVector3(lat: number, lng: number, radius: number): THREE.Vector3 {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
+  const latRad = lat * Math.PI / 180;
+  const lngRad = lng * Math.PI / 180;
   return new THREE.Vector3(
-    -(radius * Math.sin(phi) * Math.cos(theta)),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta)
+    radius * Math.cos(latRad) * Math.cos(lngRad),
+    radius * Math.sin(latRad),
+    -radius * Math.cos(latRad) * Math.sin(lngRad)
   );
 }
 
-// Convert 3D position to lat/lng (inverse of above)
+// Convert 3D position to lat/lng (inverse of latLngToVector3)
 function vector3ToLatLng(vec: THREE.Vector3): { lat: number; lng: number } {
   const normalized = vec.clone().normalize();
+  // y = sin(lat), so lat = asin(y)
   const lat = Math.asin(normalized.y) * (180 / Math.PI);
-  const lng = Math.atan2(normalized.z, -normalized.x) * (180 / Math.PI) - 180;
-  return { lat, lng: lng < -180 ? lng + 360 : lng > 180 ? lng - 360 : lng };
+  // x = cos(lat)*cos(lng), z = -cos(lat)*sin(lng)
+  // So: lng = atan2(-z, x)
+  const lng = Math.atan2(-normalized.z, normalized.x) * (180 / Math.PI);
+  return { lat, lng };
 }
 
 // ─── Tile Cache ────────────────────────────────────────────────────────
@@ -90,6 +84,7 @@ interface TileData {
   texture: THREE.Texture | null;
   loading: boolean;
   error: boolean;
+  loadedAt: number;
   bounds: { north: number; south: number; west: number; east: number };
   zoom: number;
   x: number;
@@ -98,7 +93,6 @@ interface TileData {
 
 const tileCache = new Map<string, TileData>();
 const textureLoader = new THREE.TextureLoader();
-// Enable CORS for cross-origin textures
 textureLoader.setCrossOrigin('anonymous');
 
 function getTileKey(z: number, x: number, y: number): string {
@@ -106,43 +100,52 @@ function getTileKey(z: number, x: number, y: number): string {
 }
 
 // ─── Individual Tile Component ─────────────────────────────────────────
-function Tile({ tileData, opacity }: { tileData: TileData; opacity: number }) {
-  // Create curved geometry for the tile (memoized based on bounds)
+function Tile({ tileData, globalOpacity }: { tileData: TileData; globalOpacity: number }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [tileOpacity, setTileOpacity] = useState(0);
+
+  // Fade in individual tile when loaded
+  useFrame((_, delta) => {
+    if (!tileData.texture || tileData.loading) return;
+
+    const targetOpacity = globalOpacity;
+    const diff = targetOpacity - tileOpacity;
+    if (Math.abs(diff) > 0.01) {
+      setTileOpacity(prev => prev + diff * Math.min(delta * 4, 1));
+    } else if (tileOpacity !== targetOpacity) {
+      setTileOpacity(targetOpacity);
+    }
+  });
+
   const geometry = useMemo(() => {
     const { north, south, west, east } = tileData.bounds;
 
-    // More segments for smoother curvature, especially important at close zoom
-    const segments = 24;
-    const radius = 1.002; // Slightly above globe surface to prevent z-fighting
+    const segments = 16;
+    // Radius must be > 1.002 to be above the inner rim glow in GlobeCore
+    const radius = 1.005 + (10 - tileData.zoom) * 0.0005; // Higher zoom = closer to surface
 
     const positions: number[] = [];
     const uvs: number[] = [];
     const indices: number[] = [];
 
-    // Generate vertices with proper spherical mapping
     for (let j = 0; j <= segments; j++) {
       for (let i = 0; i <= segments; i++) {
         const u = i / segments;
         const v = j / segments;
-        // Interpolate lat/lng within tile bounds
         const lat = north + (south - north) * v;
         const lng = west + (east - west) * u;
-
         const pos = latLngToVector3(lat, lng, radius);
         positions.push(pos.x, pos.y, pos.z);
-        // UV mapping: u goes left-to-right, v goes top-to-bottom in texture
         uvs.push(u, 1 - v);
       }
     }
 
-    // Generate triangle indices
     for (let j = 0; j < segments; j++) {
       for (let i = 0; i < segments; i++) {
         const a = j * (segments + 1) + i;
         const b = a + 1;
         const c = a + segments + 1;
         const d = c + 1;
-        // Two triangles per quad
         indices.push(a, c, b);
         indices.push(b, c, d);
       }
@@ -153,20 +156,19 @@ function Tile({ tileData, opacity }: { tileData: TileData; opacity: number }) {
     geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
     geo.setIndex(indices);
     geo.computeVertexNormals();
-
     return geo;
-  }, [tileData.bounds]);
+  }, [tileData.bounds, tileData.zoom]);
 
-  if (!tileData.texture || tileData.loading || tileData.error) {
+  if (!tileData.texture || tileData.loading || tileData.error || tileOpacity < 0.01) {
     return null;
   }
 
   return (
-    <mesh geometry={geometry}>
+    <mesh ref={meshRef} geometry={geometry} raycast={() => null}>
       <meshBasicMaterial
         map={tileData.texture}
         transparent
-        opacity={opacity}
+        opacity={tileOpacity}
         side={THREE.FrontSide}
         depthWrite={false}
       />
@@ -179,30 +181,28 @@ export default function HighResTileLayer() {
   const { camera } = useThree();
   const zoomDistance = useGlobeStore((s) => s.zoomDistance);
   const [visibleTiles, setVisibleTiles] = useState<TileData[]>([]);
-  const [tileOpacity, setTileOpacity] = useState(0);
+  const [globalOpacity, setGlobalOpacity] = useState(0);
   const lastUpdate = useRef(0);
   const lastCenter = useRef({ lat: 0, lng: 0, zoom: 0 });
+  const updateCounter = useRef(0);
 
-  // Calculate opacity for smooth fade-in
+  // Global opacity based on zoom distance
   const targetOpacity = useMemo(() => {
     if (zoomDistance >= TILE_CONFIG.fadeStart) return 0;
     if (zoomDistance <= TILE_CONFIG.fadeEnd) return 0.95;
-    // Smooth interpolation
     const t = (TILE_CONFIG.fadeStart - zoomDistance) / (TILE_CONFIG.fadeStart - TILE_CONFIG.fadeEnd);
     return t * 0.95;
   }, [zoomDistance]);
 
-  // Smoothly animate opacity
   useFrame((_, delta) => {
-    const diff = targetOpacity - tileOpacity;
+    const diff = targetOpacity - globalOpacity;
     if (Math.abs(diff) > 0.01) {
-      setTileOpacity((prev) => prev + diff * Math.min(delta * 5, 1));
-    } else if (tileOpacity !== targetOpacity) {
-      setTileOpacity(targetOpacity);
+      setGlobalOpacity(prev => prev + diff * Math.min(delta * 3, 1));
+    } else if (globalOpacity !== targetOpacity) {
+      setGlobalOpacity(targetOpacity);
     }
   });
 
-  // Determine if we should show/load tiles
   const showTiles = zoomDistance < TILE_CONFIG.enableThreshold;
 
   // Load a tile texture
@@ -219,6 +219,7 @@ export default function HighResTileLayer() {
       texture: null,
       loading: true,
       error: false,
+      loadedAt: 0,
       bounds,
       zoom: z,
       x,
@@ -226,7 +227,6 @@ export default function HighResTileLayer() {
     };
 
     tileCache.set(key, tileData);
-
     const url = getTileUrl(z, x, y);
 
     textureLoader.load(
@@ -238,21 +238,22 @@ export default function HighResTileLayer() {
         texture.generateMipmaps = true;
         tileData.texture = texture;
         tileData.loading = false;
-        // Force re-render by creating new array reference
-        setVisibleTiles((prev) => [...prev]);
+        tileData.loadedAt = Date.now();
+        // Trigger re-render
+        updateCounter.current++;
+        setVisibleTiles(prev => [...prev]);
       },
       undefined,
       () => {
         tileData.loading = false;
         tileData.error = true;
-        console.warn(`Failed to load tile: ${key}`);
       }
     );
 
     return tileData;
   };
 
-  // Update visible tiles based on camera position
+  // Update visible tiles
   useFrame(() => {
     if (!showTiles) {
       if (visibleTiles.length > 0) {
@@ -261,79 +262,100 @@ export default function HighResTileLayer() {
       return;
     }
 
-    // Throttle updates (but not too much for smooth experience)
     const now = Date.now();
-    if (now - lastUpdate.current < 100) return;
+    if (now - lastUpdate.current < 150) return;
     lastUpdate.current = now;
 
-    // Get the point on the globe that's facing the camera
-    // Camera position vector points from origin toward camera
-    // The point on the globe closest to camera is in the SAME direction (not negated)
+    // Get camera look point
     const lookAtPoint = camera.position.clone().normalize();
     const { lat, lng } = vector3ToLatLng(lookAtPoint);
-
-    // Calculate zoom level based on distance
     const zoom = distanceToZoom(zoomDistance);
 
-    // Skip update if center hasn't moved significantly
+    // Check if we need to update
     const latDiff = Math.abs(lat - lastCenter.current.lat);
     const lngDiff = Math.abs(lng - lastCenter.current.lng);
     const zoomChanged = zoom !== lastCenter.current.zoom;
 
-    // Only update tiles if moved enough or zoom changed
-    if (!zoomChanged && latDiff < 0.5 && lngDiff < 0.5 && visibleTiles.length > 0) {
+    if (!zoomChanged && latDiff < 1.0 && lngDiff < 1.0 && visibleTiles.length > 0) {
       return;
     }
 
     lastCenter.current = { lat, lng, zoom };
 
-    // Get the center tile
-    const centerTile = latLngToTile(lat, lng, zoom);
     const tiles: TileData[] = [];
+    const addedKeys = new Set<string>();
+
+    // Load tiles at current zoom level with large coverage
+    // Increased grid size to ensure continuous view when zoomed in
+    const currentZoomGrid = zoom >= 7 ? 6 : zoom >= 5 ? 5 : 4;
+    const centerTile = latLngToTile(lat, lng, zoom);
     const n = Math.pow(2, zoom);
 
-    // Load a grid of tiles around the center
-    // Larger grid at higher zoom for better coverage
-    const gridSize = zoom >= 8 ? 3 : zoom >= 6 ? 2 : 1;
-
-    for (let dy = -gridSize; dy <= gridSize; dy++) {
-      for (let dx = -gridSize; dx <= gridSize; dx++) {
-        // Wrap X around (longitude wraps), clamp Y (latitude doesn't wrap)
+    for (let dy = -currentZoomGrid; dy <= currentZoomGrid; dy++) {
+      for (let dx = -currentZoomGrid; dx <= currentZoomGrid; dx++) {
         const tx = ((centerTile.x + dx) % n + n) % n;
         const ty = centerTile.y + dy;
-
-        // Skip tiles outside valid Y range
         if (ty < 0 || ty >= n) continue;
 
         const tile = loadTile(zoom, tx, ty);
-        tiles.push(tile);
+        if (!addedKeys.has(tile.key)) {
+          tiles.push(tile);
+          addedKeys.add(tile.key);
+        }
       }
     }
+
+    // Also load one zoom level lower as fallback (shows while high-res loads)
+    if (zoom > 2) {
+      const lowerZoom = zoom - 1;
+      const lowerGrid = 4;
+      const lowerCenter = latLngToTile(lat, lng, lowerZoom);
+      const lowerN = Math.pow(2, lowerZoom);
+
+      for (let dy = -lowerGrid; dy <= lowerGrid; dy++) {
+        for (let dx = -lowerGrid; dx <= lowerGrid; dx++) {
+          const tx = ((lowerCenter.x + dx) % lowerN + lowerN) % lowerN;
+          const ty = lowerCenter.y + dy;
+          if (ty < 0 || ty >= lowerN) continue;
+
+          const tile = loadTile(lowerZoom, tx, ty);
+          if (!addedKeys.has(tile.key)) {
+            tiles.push(tile);
+            addedKeys.add(tile.key);
+          }
+        }
+      }
+    }
+
+    // Sort: lower zoom first (renders underneath), then by loaded status
+    tiles.sort((a, b) => {
+      if (a.zoom !== b.zoom) return a.zoom - b.zoom;
+      if (a.texture && !b.texture) return -1;
+      if (!a.texture && b.texture) return 1;
+      return 0;
+    });
 
     setVisibleTiles(tiles);
   });
 
-  // Cleanup old textures when component unmounts
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       tileCache.forEach((tile) => {
-        if (tile.texture) {
-          tile.texture.dispose();
-        }
+        if (tile.texture) tile.texture.dispose();
       });
       tileCache.clear();
     };
   }, []);
 
-  // Don't render if fully transparent
-  if (tileOpacity < 0.01) {
+  if (globalOpacity < 0.01) {
     return null;
   }
 
   return (
     <group>
       {visibleTiles.map((tile) => (
-        <Tile key={tile.key} tileData={tile} opacity={tileOpacity} />
+        <Tile key={tile.key} tileData={tile} globalOpacity={globalOpacity} />
       ))}
     </group>
   );

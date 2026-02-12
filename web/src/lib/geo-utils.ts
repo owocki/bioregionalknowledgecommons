@@ -11,28 +11,32 @@ export function latLngToVector3(
   radius: number = GLOBE_RADIUS,
   altitude: number = 0
 ): THREE.Vector3 {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
   const r = radius + altitude;
+  const latRad = lat * Math.PI / 180;
+  const lngRad = lng * Math.PI / 180;
 
+  // Standard geographic to 3D conversion matching Three.js SphereGeometry
   return new THREE.Vector3(
-    -(r * Math.sin(phi) * Math.cos(theta)),
-    r * Math.cos(phi),
-    r * Math.sin(phi) * Math.sin(theta)
+    r * Math.cos(latRad) * Math.cos(lngRad),
+    r * Math.sin(latRad),
+    -r * Math.cos(latRad) * Math.sin(lngRad)
   );
 }
 
 /**
- * Convert 3D position to lat/lng
+ * Convert 3D position to lat/lng (inverse of latLngToVector3)
+ *
+ * For camera at (0, 0, 2.8) looking at origin, this returns lat=0, lng=-90
+ * which is the Pacific Ocean (what you see on initial load).
  */
 export function vector3ToLatLng(position: THREE.Vector3): { lat: number; lng: number } {
-  const r = position.length();
-  const lat = 90 - Math.acos(position.y / r) * (180 / Math.PI);
-  const lng = -(Math.atan2(position.z, -position.x) * (180 / Math.PI)) - 180;
-  return {
-    lat,
-    lng: lng < -180 ? lng + 360 : lng > 180 ? lng - 360 : lng,
-  };
+  const normalized = position.clone().normalize();
+  // Latitude from y-component: y = sin(lat), so lat = asin(y)
+  const lat = Math.asin(normalized.y) * (180 / Math.PI);
+  // Longitude from x,z: x = cos(lat)*cos(lng), z = -cos(lat)*sin(lng)
+  // So: lng = atan2(-z, x)
+  const lng = Math.atan2(-normalized.z, normalized.x) * (180 / Math.PI);
+  return { lat, lng };
 }
 
 /**

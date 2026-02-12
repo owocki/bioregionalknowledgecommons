@@ -66,6 +66,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-01-15T00:00:00Z',
     maintainers: ['opencivics-team', 'watershed-steward'],
+    // Territory polygon around the Colorado Plateau region
+    territory_boundary: [
+      [-111.5, 39.5], [-108.5, 39.8], [-107.0, 38.5], [-107.5, 36.5],
+      [-109.0, 35.5], [-111.0, 35.8], [-112.5, 37.0], [-112.0, 38.5],
+    ],
     geo_classification: {
       realm: 'Nearctic', realm_code: 'NA', subrealm: 'Western North America',
       bioregion: 'Colorado Plateau & Mountain Forests', bioregion_code: 'NA19',
@@ -110,6 +115,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true, telegram: '@cascadia_commons_bot' },
     created_at: '2026-01-25T00:00:00Z',
     maintainers: ['cascadia-council', 'opencivics-team'],
+    // Territory polygon around Pacific Northwest / Cascadia
+    territory_boundary: [
+      [-124.5, 48.5], [-122.0, 49.0], [-120.5, 48.0], [-121.0, 46.5],
+      [-122.5, 45.0], [-124.0, 44.5], [-124.5, 46.0], [-124.8, 47.5],
+    ],
     geo_classification: {
       realm: 'Nearctic', realm_code: 'NA', subrealm: 'Western North America',
       bioregion: 'Pacific Northwest Coastal Forests', bioregion_code: 'NA08',
@@ -154,6 +164,11 @@ export const seedNodes: NodeEntry[] = [
     interaction_channels: { web_chat: true },
     created_at: '2026-02-05T00:00:00Z',
     maintainers: ['chesapeake-steward', 'opencivics-team'],
+    // Territory polygon around Chesapeake Bay watershed
+    territory_boundary: [
+      [-77.5, 39.8], [-75.5, 39.5], [-75.8, 38.0], [-76.0, 37.0],
+      [-76.5, 37.2], [-77.0, 37.8], [-77.8, 38.5], [-78.0, 39.2],
+    ],
     geo_classification: {
       realm: 'Nearctic', realm_code: 'NA', subrealm: 'Eastern North America',
       bioregion: 'Mid-Atlantic Coastal Forests', bioregion_code: 'NA25',

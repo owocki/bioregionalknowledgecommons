@@ -44,13 +44,14 @@ const REALM_CODE_MAP: Record<string, Realm> = {
 };
 
 // ─── Convert a polygon ring to 3D points on sphere ─────────────────────
-function ringToSpherePoints(ring: number[][], altitude: number = 0.001): THREE.Vector3[] {
+// Altitude above high-res tiles (1.005+) so bioregions are visible over satellite
+function ringToSpherePoints(ring: number[][], altitude: number = 0.008): THREE.Vector3[] {
   return ring.map(([lng, lat]) => latLngToVector3(lat, lng, 1.0 + altitude));
 }
 
 // ─── Create line geometry from a polygon ring ──────────────────────────
 function createBoundaryGeometry(ring: number[][]): THREE.BufferGeometry {
-  const points = ringToSpherePoints(ring, 0.002);
+  const points = ringToSpherePoints(ring, 0.009);
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
   return geometry;
 }
@@ -85,10 +86,11 @@ function createFilledGeometry(rings: number[][][]): THREE.BufferGeometry | null 
   const totalPoints = flatCoords.length / 2;
   const positions = new Float32Array(totalPoints * 3);
 
+  // Altitude above high-res tiles (1.005+) so bioregions are visible over satellite
   for (let i = 0; i < totalPoints; i++) {
     const lng = flatCoords[i * 2];
     const lat = flatCoords[i * 2 + 1];
-    const pos = latLngToVector3(lat, lng, 1.001);
+    const pos = latLngToVector3(lat, lng, 1.008);
     positions[i * 3] = pos.x;
     positions[i * 3 + 1] = pos.y;
     positions[i * 3 + 2] = pos.z;
@@ -297,24 +299,30 @@ function BioregionMesh({ bioregion, isHovered, isSelected, anySelected, onHover,
 
   const handlePointerOver = useCallback(
     (e: ThreeEvent<PointerEvent>) => {
+      // Don't capture hover if this bioregion is already selected
+      if (isSelected) return;
       e.stopPropagation();
       onHover(bioregion.code);
       document.body.style.cursor = 'pointer';
     },
-    [bioregion.code, onHover]
+    [bioregion.code, onHover, isSelected]
   );
 
   const handlePointerOut = useCallback(() => {
+    if (isSelected) return;
     onHover(null);
     document.body.style.cursor = 'default';
-  }, [onHover]);
+  }, [onHover, isSelected]);
 
   const handleClick = useCallback(
     (e: ThreeEvent<MouseEvent>) => {
+      // Don't intercept clicks if this bioregion is already selected
+      // (allows clicking through to ecoregions)
+      if (isSelected) return;
       e.stopPropagation();
       onClick(bioregion.code);
     },
-    [bioregion.code, onClick]
+    [bioregion.code, onClick, isSelected]
   );
 
   // Brighter color for lines — extra bright when selected
