@@ -11,6 +11,7 @@ import CityLabels from './CityLabels';
 import BioregionLayer from './BioregionLayer';
 import EcoregionLayer from './EcoregionLayer';
 import WaterFeaturesLayer from './WaterFeaturesLayer';
+import WatershedLayer from './WatershedLayer';
 import NodeMarkers from './NodeMarkers';
 import FlowArcs from './FlowArcs';
 import BridgeConnections from './BridgeConnections';
@@ -147,7 +148,10 @@ export default function GlobeScene() {
           <HighResTileLayer />
           {/* <TestTileLayer /> */}
 
-          {/* Water features (rivers, watersheds) */}
+          {/* Watershed basins (from HydroBASINS/GRDC data) */}
+          {showWaterFeatures && <WatershedLayer />}
+
+          {/* Rivers and lakes (from Natural Earth) */}
           {showWaterFeatures && <WaterFeaturesLayer />}
 
           {/* Political boundaries (countries + states) — tied to place names toggle */}
