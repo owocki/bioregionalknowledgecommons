@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GlobeState, Realm, ThematicDomain, CameraTarget, SelectedNativeLand } from '@/types';
+import type { GlobeState, Realm, ThematicDomain, CameraTarget, SelectedNativeLand, AppMode } from '@/types';
 
 interface HoveredFlow {
   sourceId: string;
@@ -7,6 +7,7 @@ interface HoveredFlow {
 }
 
 interface GlobeStore extends GlobeState {
+  setAppMode: (mode: AppMode) => void;
   setSelectedNode: (nodeId: string | null) => void;
   setSelectedBioregion: (code: string | null) => void;
   setHoveredBioregion: (code: string | null) => void;
@@ -49,19 +50,20 @@ interface GlobeStore extends GlobeState {
 }
 
 const initialState: GlobeState = {
+  appMode: 'knowledge-commons',
   selectedNodeId: null,
   selectedBioregion: null,
   hoveredBioregion: null,
   userLocation: null,
   userBioregion: null,
   cameraTarget: null,
-  showFlowArcs: true,
-  showBridges: true,
-  showBioregions: true,
-  showEcoregions: true,
-  showPlaceNames: true,
-  showSatelliteImagery: true,
-  showWaterFeatures: true,
+  showFlowArcs: false,
+  showBridges: false,
+  showBioregions: false,
+  showEcoregions: false,
+  showPlaceNames: false,
+  showSatelliteImagery: false,
+  showWaterFeatures: false,
   showOnboarding: false,
   showIntakeForm: false,
   selectedEcoregion: null,
@@ -86,6 +88,18 @@ export const useGlobeStore = create<GlobeStore>((set) => ({
 
   hoveredFlow: null,
   setHoveredFlow: (flow) => set({ hoveredFlow: flow }),
+  setAppMode: (mode) =>
+    set((s) => ({
+      appMode: mode,
+      // Clear KC-specific state when switching to fund mode
+      ...(mode === 'fund-a-region'
+        ? { selectedNodeId: null, hoveredFlow: null }
+        : {}),
+      // Clear fund-specific state when switching to KC mode
+      ...(mode === 'knowledge-commons'
+        ? { selectedBioregion: s.appMode === 'fund-a-region' ? null : s.selectedBioregion }
+        : {}),
+    })),
   setSelectedNode: (nodeId) => set({ selectedNodeId: nodeId }),
   setSelectedBioregion: (code) => set({ selectedBioregion: code }),
   setHoveredBioregion: (code) => set({ hoveredBioregion: code }),

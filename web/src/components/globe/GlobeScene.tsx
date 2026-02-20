@@ -68,11 +68,13 @@ function DynamicRotateSpeed({ controlsRef }: { controlsRef: React.RefObject<Orbi
 
 export default function GlobeScene() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
+  const appMode = useGlobeStore((s) => s.appMode);
   const showPlaceNames = useGlobeStore((s) => s.showPlaceNames);
   const showSatelliteImagery = useGlobeStore((s) => s.showSatelliteImagery);
   const showWaterFeatures = useGlobeStore((s) => s.showWaterFeatures);
   const selectedBioregion = useGlobeStore((s) => s.selectedBioregion);
   const selectedEcoregion = useGlobeStore((s) => s.selectedEcoregion);
+  const isKC = appMode === 'knowledge-commons';
 
   const zoomDistance = useGlobeStore((s) => s.zoomDistance);
 
@@ -169,14 +171,14 @@ export default function GlobeScene() {
           {/* Ecoregion sub-regions (shown when bioregion selected + toggle on) */}
           <EcoregionLayer />
 
-          {/* Node markers with hover labels */}
-          <NodeMarkers />
+          {/* Node markers with hover labels (KC mode only) */}
+          {isKC && <NodeMarkers />}
 
-          {/* Animated flow arcs */}
-          <FlowArcs />
+          {/* Animated flow arcs (KC mode only) */}
+          {isKC && <FlowArcs />}
 
-          {/* Dashed bridge connections */}
-          <BridgeConnections />
+          {/* Dashed bridge connections (KC mode only) */}
+          {isKC && <BridgeConnections />}
 
           {/* Territory boundary drawing (onboarding) */}
           <TerritoryDrawer />

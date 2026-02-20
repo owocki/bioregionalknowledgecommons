@@ -169,6 +169,12 @@ export interface BridgeEntry {
 }
 
 // ============================================================
+// App Mode
+// ============================================================
+
+export type AppMode = 'knowledge-commons' | 'fund-a-region';
+
+// ============================================================
 // Globe Interaction Types
 // ============================================================
 
@@ -181,6 +187,7 @@ export interface CameraTarget {
 }
 
 export interface GlobeState {
+  appMode: AppMode;
   selectedNodeId: string | null;
   selectedBioregion: string | null;
   hoveredBioregion: string | null;

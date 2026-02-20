@@ -104,7 +104,40 @@ function ViewModeButton({
   );
 }
 
+function ModeToggle() {
+  const appMode = useGlobeStore((s) => s.appMode);
+  const setAppMode = useGlobeStore((s) => s.setAppMode);
+
+  return (
+    <div className="flex rounded-lg bg-gray-800/60 p-0.5 border border-gray-700/30">
+      <button
+        onClick={() => setAppMode('knowledge-commons')}
+        className={[
+          'flex-1 text-[10px] font-semibold px-2.5 py-1.5 rounded-md transition-all duration-200',
+          appMode === 'knowledge-commons'
+            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+            : 'text-gray-500 hover:text-gray-300 border border-transparent',
+        ].join(' ')}
+      >
+        Knowledge Commons
+      </button>
+      <button
+        onClick={() => setAppMode('fund-a-region')}
+        className={[
+          'flex-1 text-[10px] font-semibold px-2.5 py-1.5 rounded-md transition-all duration-200',
+          appMode === 'fund-a-region'
+            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+            : 'text-gray-500 hover:text-gray-300 border border-transparent',
+        ].join(' ')}
+      >
+        Fund a Region
+      </button>
+    </div>
+  );
+}
+
 export default function ControlPanel() {
+  const appMode = useGlobeStore((s) => s.appMode);
   const showFlowArcs = useGlobeStore((s) => s.showFlowArcs);
   const showBridges = useGlobeStore((s) => s.showBridges);
   const showBioregions = useGlobeStore((s) => s.showBioregions);
@@ -127,6 +160,7 @@ export default function ControlPanel() {
   const toggleNativeLanguages = useGlobeStore((s) => s.toggleNativeLanguages);
   const toggleNativeTreaties = useGlobeStore((s) => s.toggleNativeTreaties);
   const setViewMode = useGlobeStore((s) => s.setViewMode);
+  const isKC = appMode === 'knowledge-commons';
 
   // Mobile: collapsed / expanded state
   const [mobileExpanded, setMobileExpanded] = useState(false);
@@ -173,23 +207,30 @@ export default function ControlPanel() {
                   <div className="w-8 h-1 rounded-full bg-gray-600" />
                 </div>
 
+                {/* Mode Toggle */}
+                <ModeToggle />
+
                 {/* Layer Toggles */}
                 <div className="space-y-1">
                   <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold mb-1.5">
                     Layers
                   </h4>
-                  <Toggle
-                    label="Flow Arcs"
-                    enabled={showFlowArcs}
-                    onToggle={toggleFlowArcs}
-                    icon={<LayerArcIcon />}
-                  />
-                  <Toggle
-                    label="Bridges"
-                    enabled={showBridges}
-                    onToggle={toggleBridges}
-                    icon={<BridgeIcon />}
-                  />
+                  {isKC && (
+                    <>
+                      <Toggle
+                        label="Flow Arcs"
+                        enabled={showFlowArcs}
+                        onToggle={toggleFlowArcs}
+                        icon={<LayerArcIcon />}
+                      />
+                      <Toggle
+                        label="Bridges"
+                        enabled={showBridges}
+                        onToggle={toggleBridges}
+                        icon={<BridgeIcon />}
+                      />
+                    </>
+                  )}
                   <Toggle
                     label="Bioregions"
                     enabled={showBioregions}
@@ -293,23 +334,30 @@ export default function ControlPanel() {
       {/* ─── Desktop: Always-visible panel (>= 640px) ─── */}
       <div className="hidden sm:block">
         <div className="bg-gray-900/85 backdrop-blur-xl rounded-xl border border-gray-700/30 shadow-xl shadow-black/20 p-3 space-y-3 w-[200px]">
+          {/* Mode Toggle */}
+          <ModeToggle />
+
           {/* Layer Toggles */}
           <div className="space-y-1">
             <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold mb-1.5">
               Layers
             </h4>
-            <Toggle
-              label="Flow Arcs"
-              enabled={showFlowArcs}
-              onToggle={toggleFlowArcs}
-              icon={<LayerArcIcon />}
-            />
-            <Toggle
-              label="Bridges"
-              enabled={showBridges}
-              onToggle={toggleBridges}
-              icon={<BridgeIcon />}
-            />
+            {isKC && (
+              <>
+                <Toggle
+                  label="Flow Arcs"
+                  enabled={showFlowArcs}
+                  onToggle={toggleFlowArcs}
+                  icon={<LayerArcIcon />}
+                />
+                <Toggle
+                  label="Bridges"
+                  enabled={showBridges}
+                  onToggle={toggleBridges}
+                  icon={<BridgeIcon />}
+                />
+              </>
+            )}
             <Toggle
               label="Bioregions"
               enabled={showBioregions}

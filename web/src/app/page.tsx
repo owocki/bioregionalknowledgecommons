@@ -88,6 +88,12 @@ const WelcomeTile = dynamic(
   { ssr: false }
 );
 
+// Funding panel - shows when clicking a bioregion in fund mode
+const FundingPanel = dynamic(
+  () => import('@/components/layout/FundingPanel').then((mod) => mod.default),
+  { ssr: false }
+);
+
 function GlobeLoadingFallback() {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-950" role="status">
@@ -173,8 +179,10 @@ function KeyboardShortcutsOverlay({ onClose }: { onClose: () => void }) {
 export default function HomePage() {
   const { showShortcuts, setShowShortcuts } = useKeyboardNav();
   const viewMode = useGlobeStore((s) => s.viewMode);
+  const appMode = useGlobeStore((s) => s.appMode);
   const showIntakeForm = useGlobeStore((s) => s.showIntakeForm);
   const setShowIntakeForm = useGlobeStore((s) => s.setShowIntakeForm);
+  const isKC = appMode === 'knowledge-commons';
 
   return (
     <main
@@ -229,43 +237,30 @@ export default function HomePage() {
         </button>
       </div>
 
-      {/* Welcome tile - floating context card for first-time visitors */}
-      <WelcomeTile />
+      {/* KC-only overlays */}
+      {isKC && (
+        <>
+          <WelcomeTile />
+          <SearchOverlay />
+          <FlowTooltip />
+          <NodeCard />
+          <StartCommonsButton />
+          <OnboardingWizard />
+          <AnimatePresence>
+            {showIntakeForm && <IntakeForm onClose={() => setShowIntakeForm(false)} />}
+          </AnimatePresence>
+          <BioregionPanel />
+        </>
+      )}
 
-      {/* Search overlay - top center */}
-      <SearchOverlay />
+      {/* Fund-only overlays */}
+      {!isKC && <FundingPanel />}
 
-      {/* Control panel - bottom left */}
+      {/* Shared overlays (always visible) */}
       <ControlPanel />
-
-      {/* Bioregion tooltip - follows hover */}
       <BioregionTooltip />
-
-      {/* Flow tooltip - follows hover on arcs */}
-      <FlowTooltip />
-
-      {/* Find My Bioregion prompt - bottom center */}
       <FindMyBioregion />
-
-      {/* Bioregion detail panel - slides in from left (desktop) or bottom (mobile) */}
-      <BioregionPanel />
-
-      {/* Native Land panel - shows when clicking an indigenous territory/language/treaty */}
       <NativeLandPanel />
-
-      {/* Node detail card - slides in from right (desktop) or bottom (mobile) */}
-      <NodeCard />
-
-      {/* Start a Commons CTA - bottom right */}
-      <StartCommonsButton />
-
-      {/* Onboarding wizard */}
-      <OnboardingWizard />
-
-      {/* Intake form for guided onboarding */}
-      <AnimatePresence>
-        {showIntakeForm && <IntakeForm onClose={() => setShowIntakeForm(false)} />}
-      </AnimatePresence>
 
       {/* Keyboard shortcuts overlay */}
       <AnimatePresence>
